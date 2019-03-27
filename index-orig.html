@@ -1,0 +1,1207 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+
+		<title>Git</title>
+
+		<meta name="description" content="Git & Gitflow">
+		<meta name="author" content="Zdravko Stoychev">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/simple.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+		<div class="reveal">
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>Git</h1>
+				</section>
+
+				<section>
+					<blockquote>
+						<ul>
+							<li>If you’re not distributed, you are not worth using;</li>
+							<li>If you perform badly, you are not worth using;</li>
+							<li>And if you cannot guarantee that the stuff I put into an SCM comes out exactly the same, you are not worth using;</li>
+						</ul>
+					</blockquote>
+					<p class="fragment">“Quite frankly, that pretty much took care of everything out there.”</p>
+				</section>
+
+				<section>
+					<section>
+						<h2>Git</h2>
+						<ul>
+							<li>Distributed</li>
+							<li>Performant</li>
+							<li>Trustworthy</li>
+							<li class="fragment">Content management system</li>
+							<li class="fragment">Supports branching and merging with ease</li>
+							<li class="fragment">Relatively easy to build clean history</li>
+							<li class="fragment">Supports many different workflows</li>
+						</ul>
+					</section>
+				</section>
+
+				<section>
+					<h2>Distribution</h2>
+					<p><img src="images/distributed.png" alt="" />
+				</section>
+
+				<section>
+					<h2>Distribution</h2>
+					<ul>
+						<li>Everyone has a copy of the entire repository</li>
+						<li>No single place is more important than any other</li>
+						<li>Every branch is a fork</li>
+						<li>Everyone works freely in his own repository</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Git Repository</h2>
+					<ul>
+						<li>Objects</li>
+						<li>Index</li>
+						<li>Working directory</li>
+						<li>Refs</li>
+					</ul>
+				</section>
+				
+				<section>
+					<h2>Objects</h2>
+					<ul style="width: 400px">
+						<li>Blobs</li>
+						<li>Trees</li>
+						<li>Commits</li>
+						<li>Tags</li>
+					</ul>
+					<p class="fragment">
+						Every object is immutable <br />
+						<span class="fragment">and identified by the SHA-1 hash of its content</span>
+					</p>
+				</section>
+				
+				<section>
+					<h2>Blob</h2>
+					<ul>
+						<li>A regular file</li>
+						<li>Only its content, no its filename or other metadata</li>
+						<li>Every update on a file is a fully new blob (git doesn't record file-specific history).</li>
+					</ul>
+				</section>
+				
+				<section>
+					<h2>Tree</h2>
+					<ul>
+						<li>A level of directory information</li>
+						<li>A collection of records that points to a (sub)tree, a blob or a submodule commit</li>
+						<li>Stores the metadata — filename, file permissions</li>
+					</ul>
+				</section>
+				
+				<section>
+					<h2>Tree</h2>
+					<pre><code>$ git cat-file -p ac3141ec562ac0b44a1745b62fc89b008a0d5c6b
+100644 blob d08153a0905e4bde2d50407aabc2deab52d5d5f0    .gitignore
+100644 blob 68ae013dab65d879d52b8c84645105d31884e505    .gitmodules
+100644 blob c9356ad1684a7288107ae1fd35b6630e1c9dcfc4    .project
+100644 blob 49107516279ea927db3301b9dd9a3d70172e1466    README.markdown
+040000 tree 48cd144705043885a1674b793fc9e1eeab4de36f    admin-client
+040000 tree cf1c2bce90ecfd9077f4f886f95120c51a5ce5c7    common
+040000 tree f1116f9eb3eeabe9e6f5030657ea2d9588cd301e    content-ingest
+040000 tree fc54c57f3b96642fdb00c36bccee5c40d0af69b1    domain
+040000 tree 71f97a4e4791b3f99f7ed44505e73f4d8453fb9e    map-reduce
+100644 blob 72e6905a049d84a74db7997286a3718e02b29423    pom.xml
+040000 tree b13f3944a6ab3d00d4df88f29282b80f532864f4    repository
+100644 blob 9cf2466de05cb68325044205b9dec3ee20274eb0    rivinet-platform.iml
+040000 tree 9e8843121eb0320ffe3161699675999c06cdd8e1    service
+040000 tree 1c9410083792c706a36426ccc2c4163b03c3bf61    src
+040000 tree 63a7c40fc610827f7ae2559e658a233a8111dac3    user-client
+040000 tree 120de003c21b4137bbc42ccd7e82a6a8d5d60c66    web-server-client</code></pre>
+				</section>
+				
+				<section>
+					<h2>Tree</h2>
+					<pre><code>$ git cat-file -p 9e8843121eb0320ffe3161699675999c06cdd8e1
+100644 blob 648fe13c95d9740406995ef1fdeddb527e5108ac    .classpath
+100644 blob 5e7bffab5fe0a9560df8203accb7b6c6f073e5c4    .project
+040000 tree 6a396a8c1d70735302ee7729d599911e0951673d    geoIp
+100644 blob 09692ba6b44e51418d221deaf2cb53c55e0d197b    pom.xml
+040000 tree 1485d5592b1624b4be949393b3f246da7586c37f    registration
+100644 blob 5fcef5277756611954364a61d28435fb53019477    service.iml
+040000 tree 66c64505c39adbcaa3e2185ed2500e986f0c4d2e    src</code></pre>
+				</section>
+				
+				<section>
+					<h2>Commit</h2>
+					<p>Holds the metadata of a repository change</p>
+					<ul>
+						<li>Author and authored date</li>
+						<li>Commiter and commited date</li>
+						<li>Directory structure — a tree object</li>
+						<li>Parent commit(s)</li>
+					</ul>
+				</section>
+				
+				<section>
+					<h2>Commit</h2>
+					<pre><code>$ git cat-file -p b02f0f8
+tree 4b99eeaaad4c6af91b46d869f96d735d561daf9a
+parent 09a7f919ed912534544489cff608cc18920aece5
+author Yavor Yankov &lt;iiankov@obecto.com&gt; 1382435241 +0300
+committer Yavor Yankov &lt;iiankov@obecto.com&gt; 1382435241 +0300</code></pre>
+				</section>
+				
+				<section>
+					<h2>Commit</h2>
+					<pre><code>$ git cat-file -p develop
+tree 2c862e3d773a711e18852d1e59cefe5c16fb0d08
+parent b02f0f83655ab16466b2e1f61609d0535362f737
+parent eed89a6588c04528b307fa8d704066a725297230
+author Zdravko Stoychev &lt;zstoychev@obecto.com&gt; 1382452829 +0300
+committer Zdravko Stoychev &lt;zstoychev@obecto.com&gt; 1382452829 +0300
+
+Merge branch 'hotfix/0.2.5.1' into develop</code></pre>
+				</section>
+
+				<section>
+					<h2>Tag</h2>
+					<ul>
+						<li>A reference to a specific object, usually a commit</li>
+						<li>Annotated and lighweight</li>
+					</ul>
+					
+				</section>
+
+				<section>
+					<h2>Tag</h2>
+					<pre><code>$ git cat-file -p 0.2.5
+object 427070a7f5b7ac09e4f27644715dcbc09d37c359
+type commit
+tag 0.2.5
+tagger Zdravko Stoychev &lt;zstoychev@obecto.com&gt; Mon Oct 14 11:49:15 2013 +0300
+
+Completing the release/0.2.5 branch</code></pre>
+				</section>
+
+				<section>
+					<h2>Index</h2>
+
+					<pre><code>$ git ls-files -s
+100644 1620d5c9c4d3102beb552bc2db496482924386ea 0       .gitignore
+100644 729c14459ef878396ea31aa39c66288718a55f89 0       .gitlab-ci.yml
+100644 8bd049ee3fb4630f73534e21eb2c9cb715958bed 0       Dockerfile
+100644 1020099864cdeb08e609bea9867454ff2e9aec87 0       build.sbt
+100644 45a71bdbe258baccae6592ec526cda40491b0abd 0       project/build.properties
+100644 cc9a881cbc5c19f3874f9690e9026241d3719843 0       project/plugins.sbt
+100644 d3f48561aaf8058a2bf43ec7eeaa6160091bc3f4 0       src/main/resources/application.conf
+100644 7e4b43d21b7f567036fbbffd22342ef82cc0ce29 0       src/main/resources/logback.xml
+100644 5130484f89f5592193350336705224bf77ff2a10 0       src/main/scala/com/ocado/vedatacollector/Healthcheck.scala
+100644 d81d31ce802fce025980087887bea83c2a0e2af8 0       src/main/scala/com/ocado/vedatacollector/Main.scala
+100644 351fdde65b4c29ff46353c82678efaec3b78388d 0       src/main/scala/com/ocado/vedatacollector/MessageTransformer.scala
+100644 5734e60865e03b11406de0277a46f0a5933f2628 0       src/main/scala/com/ocado/vedatacollector/transformation/MultiplicationTransformation.scala
+100644 f473cb3092785bb10066e74cd9d2dc161311430d 0       src/main/scala/com/ocado/vedatacollector/transformation/ReportingMessageMultiplications.scala
+100644 100fe83a3731201df31fc50a4e9d47fd93e5d1cb 0       src/main/scala/com/ocado/vedatacollector/transformation/Transformation.scala
+100644 127b71ea2b2bf1eaaaf1e6568e4a66c88f32f206 0       src/main/scala/com/ocado/vedatacollector/utils/JsonUtils.scala
+100644 e7f7bd8c128a9ed3c5eeea46a3425d34e3737a24 0       src/test/scala/com/ocado/vedatacollector/MessageTransformerTest.scala
+100644 0a226fb721045e7fe2b8db8f08376d4df1ff4360 0       src/test/scala/com/ocado/vedatacollector/test/UnitTest.scala
+100644 0b9cdeaaae8506e31bb1dad9cbee6603a283cf51 0       src/test/scala/com/ocado/vedatacollector/transformation/MultiplicationTransformationTest.scala
+100644 5a75350a9756a8d41ea36781da9ff5939c58da52 0       src/test/scala/com/ocado/vedatacollector/transformation/TransformationTest.scala
+100644 bd20c9e3fda4542a1b9cb4a6da14c570e9c77abf 0       src/test/scala/com/ocado/vedatacollector/utils/JsonUtilsTest.scala
+</code></pre>
+				</section>
+
+				<section>
+					<h2>Objects Demo</h2>
+				</section>
+
+				<section>
+					<h2>Refs</h2>
+
+					<ul>
+						<li>Branches</li>
+						<li>Tags (lightweight and annotated)</li>
+					</ul>
+				</section>
+
+				<section>
+					<p><img src="images/httpatomoreillycomsourceoreillyimages1286900.png" alt="" /></p>
+				</section>
+
+				<section>
+					<p><img src="images/httpatomoreillycomsourceoreillyimages1286902.png" alt="" /></p>
+				</section>
+
+				<section>
+					<p><img src="images/httpatomoreillycomsourceoreillyimages1286916.png.jpg" alt="" /></p>
+				</section>
+
+				<section>
+					<p>Everything else is a tooling built upon this foundation.</p>
+				</section>
+
+				<section>
+					<h2>Showing/Analysing<br />Repository Content</h2>
+
+					<ul>
+						<li>git show</li>
+						<li>git cat-file</li>
+						<li>git diff</li>
+						<li>git log</li>
+						<li>git blame</li>
+					</ul>
+
+					<p class="fragment">Git doesn't track renames. It infers them (with a probability).</p>
+				</section>
+
+				<section>
+					<h2>git blame</h2>
+					<ul>
+						<li>git blame file</li>
+						<li>git blame -w — ignore whitespace</li>
+						<li>git blame -M — detects moved lines within a files</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>git blame</h2>
+					<p>prod.c</p>
+					<pre><code>#include &lt;math.h&gt;
+double sum(const double* in, int n) {
+    int i;
+    double acc = 0;
+
+    for(i = 0; i &lt; n; ++i) {
+        acc += in[i];
+    }
+
+    return acc;
+}</code></pre>
+					<p>sum.c</p>
+					<pre><code>#include &lt;math.h&gt;
+
+double prod(const double* in, int n) {
+    int i;
+    double acc = 1;
+
+    for(i = 0; i &lt; n; ++i) {
+        acc *= in[i];
+    }
+
+    return acc;
+}</code></pre>
+				</section>
+
+				<section>
+					<h2>git blame</h2>
+					<p>common.c (in newer commit)</p>
+					<pre><code>#include &lt;math.h&gt;
+
+double prod(const double* in, int n) {
+    int i;
+    double acc = 1;
+
+    for(i = 0; i &lt; n; ++i) {
+        acc *= in[i];
+    }
+
+    return acc;
+}
+
+double sum(const double* in, int n) {
+    int i;
+    double acc = 0;
+
+    for(i = 0; i &lt; n; ++i) {
+        acc += in[i];
+    }
+
+    return acc;
+}</code></pre>
+				</section>
+
+				<section>
+					<h2>git blame</h2>
+					<p>git blame -C common.c</p>
+					<pre><code>^ae7f28a prod.c  1) #include &lt;math.h&gt;
+^ae7f28a prod.c  2)
+^ae7f28a prod.c  3) double prod(const double* in, int n) {
+^ae7f28a prod.c  4)     int i;
+^ae7f28a prod.c  5)     double acc = 1;
+^ae7f28a prod.c  6)
+^ae7f28a prod.c  7)     for(i = 0; i &lt; n; ++i) {
+^ae7f28a prod.c  8)         acc *= in[i];
+^ae7f28a prod.c  9)     }
+^ae7f28a prod.c 10)
+^ae7f28a prod.c 11)     return acc;
+^ae7f28a prod.c 12) }
+^ae7f28a sum.c  13)
+^ae7f28a sum.c  14) double sum(const double* in, int n) {
+^ae7f28a sum.c  15)     int i;
+^ae7f28a sum.c  16)     double acc = 0;
+^ae7f28a sum.c  17)
+^ae7f28a sum.c  18)     for(i = 0; i &lt; n; ++i) {
+^ae7f28a sum.c  19)         acc += in[i];
+^ae7f28a sum.c  20)     }
+^ae7f28a sum.c  21)
+^ae7f28a sum.c  22)     return acc;
+^ae7f28a sum.c  23) }</code></pre>
+				</section>
+
+				<section>
+					<h2>Referencing objects</h2>
+
+					<ul>
+						<li>Object’s hash — <code>eed89a6588c0452</code></li>
+						<li>Tags</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Referencing commits</h2>
+					<ul>
+						<li>Commit’s hash — <code>eed89a6588c0452</code></li>
+						<li>Named refs — branches, tags</li>
+						<li>Special names
+							<ul>
+								<li>HEAD — the checkouted commit (or the most recent commit on the current branch)</li>
+								<li>ORIG_HEAD — the state of HEAD before certain operations like merge, reset, etc.</li>
+								<li>FETCH_HEAD — the head of the last fetched branch (after git fetch)</li>
+								<li>MERGE_HEAD — the tip of the other branch, when a merge is in progress</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Referencing commits</h2>
+					<ul>
+						<li>@{u} – the upstream branch of HEAD</li>
+						<li>develop@{u}</li>
+						<li>develop@{yesterday}</li>
+						<li>develop@{last Monday}</li>
+						<li>develop@{3 hours ago}</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Referencing commits</h2>
+					<ul>
+						<li>Relative names
+							<ul>
+								<li>HEAD~2</li>
+								<li>HEAD^</li>
+								<li>master~3^2~</li>
+							</ul>
+						</li>
+					</ul>
+					<p><img src="images/httpatomoreillycomsourceoreillyimages1286914.png" alt="" /></p>
+				</section>
+
+				<section>
+					<h2>Commit ranges</h2>
+					<ul>
+						<li><code>start..end</code> — the set of commits reachable from end that are not reachable from start.</li>
+						<li class="fragment">e.g. <code>master..origin/master</code> – the commits from origin/master that are not yet merged into master</li>
+						<li class="fragment"><code>master...develop</code> — the symmetric difference between the commits</li>
+						<li class="fragment"><code>git log X</code> – all commits reachable from X</li>
+						<li class="fragment"><code>git log ^X</code> – ignore commits reachable from X</li>
+						<li class="fragment"><code>git log ^develop ^topic master</code></li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Referencing files</h2>
+
+					<ul>
+						<li>git show/diff &lt;commit&gt;:&lt;file&gt;</li>
+						<li>git log &lt;commit&gt; -- &lt;file&gt;</li>
+						<li>git checkout &lt;commit&gt; -- &lt;file&gt;</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Managing</h2>
+
+					<ul>
+						<li>the index</li>
+						<li>the working directory</li>
+						<li>the current branch</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Managing the index</h2>
+					<ul>
+						<li>
+							git add &lt;filepattern&gt;...
+							<ul>
+								<li>git add -p – adding patches</li>
+							</ul>
+						</li>
+						<li>git rm &lt;filepattern&gt;...</li>
+						<li>git mv &lt;source&gt; &lt;destination&gt;</li>
+						<li>&lt;filepattern&gt; — '*.java', 'a/bc/d/*.xml'</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Managing the index</h2>
+					<h3>File classification</h3>
+					<ul>
+						<li>Tracked</li>
+						<li>Ignored</li>
+						<li>Untracked</li>
+					</ul>
+				</section>
+				
+				<section>
+					<h2>Managing the working directory</h2>
+					<ul>
+						<li>git checkout [ref] &lt;paths&gt;... — from the index/the ref</li>
+						<li>git checkout [ref] — update the index, the working directory and HEAD to match that ref</li>
+						<li>git clean -f -d</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Managing the current branch</h2>
+
+					<ul>
+						<li>git commit<br />(new commit from the index, --author, etc)</li>
+						<li>git commit --amend<br />(copy of the last commit with the current index)</li>
+						<li>git reset</li>
+						<li>git merge</li>
+						<li>git rebase</li>
+						<li>git cherry-pick</li>
+						<li>git revert</li>
+					</ul>
+				</section>
+
+				<!--<section>-->
+					<!--<h2>Other tools and topics</h2>-->
+
+					<!--<ul>-->
+						<!--<li>Remoting</li>-->
+						<!--<li>git reflog</li>-->
+						<!--<li>git bisect</li>-->
+						<!--<li>git stash</li>-->
+						<!--<li>submodules</li>-->
+						<!--<li>workflows</li>-->
+					<!--</ul>-->
+				<!--</section>-->
+
+				<section>
+					<p>git commit</p>
+
+					<p class="fragment">What happens?</p>
+				</section>
+
+				<section>
+					<h2>Commit messages</h2>
+
+					<p class="fragment"><a href="https://chris.beams.io/posts/git-commit/">How to Write a Git Commit Message</a></p>
+				</section>
+
+				<section>
+					<h2>Commit messages</h2>
+					<pre><code>Summarize changes in around 50 characters or less
+
+More detailed explanatory text, if necessary. Wrap it to about 72
+characters or so. In some contexts, the first line is treated as the
+subject of the commit and the rest of the text as the body. The
+blank line separating the summary from the body is critical (unless
+you omit the body entirely); various tools like `log`, `shortlog`
+and `rebase` can get confused if you run the two together.
+
+Explain the problem that this commit is solving. Focus on why you
+are making this change as opposed to how (the code explains that).
+Are there side effects or other unintuitive consequences of this
+change? Here's the place to explain them.
+
+Further paragraphs come after blank lines.
+
+ - Bullet points are okay, too
+
+ - Typically a hyphen or asterisk is used for the bullet, preceded
+   by a single space, with blank lines in between, but conventions
+   vary here
+
+If you use an issue tracker, put references to them at the bottom,
+like this:
+
+Resolves: #123
+See also: #456, #789</code></pre>
+				</section>
+
+				<section>
+					<h2>Commit messages</h2>
+
+					<ol>
+						<li>Separate subject from body with a blank line</li>
+						<li>Limit the subject line to 50 characters</li>
+						<li>Capitalize the subject line</li>
+						<li>Do not end the subject line with a period</li>
+						<li>
+							Use the imperative mood in the subject line
+
+							<ul>
+								<li>If applied, this commit will &lt;subject-line&gt;</li>
+							</ul>
+						</li>
+						<li>Wrap the body at 72 characters</li>
+						<li>Use the body to explain what and why vs. how</li>
+					</ol>
+				</section>
+
+				<section>
+					<p>Git already provides such style of messages for its operations — merge, revert, etc</p>
+				</section>
+
+				<section>
+					<h2>Changing last commit</h2>
+
+					<p>git commit --amend</p>
+				</section>
+
+				<section>
+					<h2>Changing to a known state</h2>
+					<ul>
+						<li>git reset --soft <em>[commit]</em>
+							<ul>
+								<li>points the current branch to that commit</li>
+							</ul>
+						</li>
+						<li class="fragment">git reset --mixed <em>[commit]</em> (the default)
+							<ul>
+								<li>points the current branch to that commit</li>
+								<li>changes the index to the tree in that commit</li>
+							</ul>
+						</li>
+						<li class="fragment">git reset --hard <em>[commit]</em>
+							<ul>
+								<li>points the current branch to that commit</li>
+								<li>changes the index to the tree in that commit</li>
+								<li>changes the state of the working directory to match that commit (untracked and ignored files are untouched)</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				
+				<section>
+					<h2>Merge</h2>
+					<pre><code>$ git checkout branch
+$ git merge other-branch</code></pre>
+					<pre><code>Merge branch 'release/0.2.4' into develop
+
+# Conflicts:
+#    service/src/main/java/com/rivinet/service/domain/member/impl/MemberProfileInfoServiceImpl.java</code></pre>
+				</section>
+				
+				<section>
+					<h2>Merge conflicts</h2>
+					<ul>
+						<li>For each conflicted file the index contains the merge base version, “our” version and “their” version</li>
+						<li>git log --merge --left-right -p</li>
+						<li>git checkout --ours</li>
+						<li>git checkout --theirs</li>
+						<li>git merge --abort</li>
+					</ul>
+				</section>
+				
+				<section>
+					<h2>Degenerate merge strategies</h2>
+					<ul>
+						<li>Already up-to-date</li>
+						<li>Fast-forward (disallow with --no-ff)</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Two way merge<br /><span class="fragment">– not used by Git</span></h2>
+
+					<p class="fragment"><img src="images/figure-5.png" /></p>
+				</section>
+				
+				<section>
+					<h2>Resolve merge strategy</h2>
+					<p>Three way merge between the merge base and the two branches</p>
+					<p><img src="images/basicmerge.png" alt="" />
+				</section>
+
+				<section>
+					<h2>Resolve merge strategy</h2>
+					<p><img src="images/fearofmerging-figure-2.jpg" alt="" />
+				</section>
+				
+				<section>
+					<h2>Recursive merge strategy</h2>
+					<p>The default. Minimizes conflicts</p>
+				</section>
+				
+				<section>
+					<h2>Recursive merge strategy</h2>
+					<p><img src="images/recursivemergesample00.png" alt="" />
+				</section>
+				
+				<section>
+					<h2>Recursive merge strategy</h2>
+					<p><img src="images/recursivemergesample01.png" alt="" />
+				</section>
+				
+				<section>
+					<h2>Other merge strategies</h2>
+					<ul>
+						<li>Octopus</li>
+						<li>Ours</li>
+						<li>Subtree</li>
+						<li>Squash</li>
+					</ul>
+				</section>
+				
+				<section>
+					<h2>Merge tool</h2>
+					<ul>
+						<li>merge.tool config</li>
+						<li>git mergetool <em>[file...]</em></li>
+						<li>mergetool.keepBackup</li>
+					</ul>
+				</section>
+				
+				<section>
+					<h2>Picking individual commits</h2>
+					<ul>
+						<li>git cherry-pick &lt;commit&gt; — apply that commit to the current HEAD (and update the branch)</li>
+						<li class="fragment">git cherry-pick start^..end — apply the commits in the range start^..end to the current HEAD (and update the branch)</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Reverting commits</h2>
+					<ul>
+						<li>git revert &lt;commit&gt; - creates a new commit that undoes the changes in the specified commit</li>
+						<li>git revert start^..end — for each commit in the range create a new commit that undoes it</li>
+					</ul>
+					<pre><code>Revert "Show the end screen when the video is paused"
+
+This reverts commit f3db63c38b879deda3c8656df847fbb26a31c0ea.</code></pre>
+				</section>
+
+				<section>
+					<h2>Reverting merge commits</h2>
+					<pre><code> ---o---o---o---M---x---x
+	       /
+       ---A---B</code></pre>
+					<p class="fragment">git revert -m 1 <em>M</em></p>
+					<pre class="fragment"><code> ---o---o---o---M---x---x---W
+	       /
+       ---A---B</code></pre>
+					<pre class="fragment"><code>$ git merge feature
+Already up-to-date.</code></pre>
+				</section>
+
+				<section>
+					<h2>Reverting merge commits</h2>
+					<p>Fix the branch</p>
+					<pre><code> ---o---o---o---M---x---x---W---x
+	       /
+       ---A---B-------------------C---D</code></pre>
+					<div class="fragment">
+					<pre><code>$ git revert W
+Finished one revert.
+[master 268e243] Revert "Revert "Merge branch 'feature'""
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+$ git merge feature
+Auto-merging test.txt
+Merge made by recursive.
+ test.txt |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)</code></pre>
+
+					<pre><code> ---o---o---o---M---x---x---W---x---M'--*
+	       /                       /
+       ---A---B-------------------C---D</code></pre>
+					</div>
+				</section>
+
+				<section>
+					<h2>Reverting merge commits</h2>
+					<p>Fix on a new branch</p>
+
+					<pre><code>$ git checkout feature-prime
+$ git revert W
+...
+$ git merge feature-prime</code></pre>
+
+					<pre><code> ---o---o---o---M---x---x---W---x---x---x---*
+	       /                 \         /
+       ---A---B                   M'--C---D</code></pre>
+				</section>
+
+				<section>
+					<h2>Reverting merge commits</h2>
+					<p>Rebase the branch</p>
+
+					<pre><code> ---o---o---o---M---x---x---W---x---x---x---x---*
+	       /                 \             /
+       ---A---B                   A'--B'--C---D</code></pre>
+				</section>
+
+				<section>
+					<h2>Reverting merge commits</h2>
+					<p>If a fix is quick enough you can also just fix the problem instead of reverting the whole merge</p>
+				</section>
+				
+				<section>
+					<h2>Rebasing commits</h2>
+					<p><img src="images/httpatomoreillycomsourceoreillyimages1286988.png" alt="" /></p>
+					<pre><code>$ git checkout topic
+$ git rebase master</code></pre>
+					<p><img src="images/httpatomoreillycomsourceoreillyimages1286990.png" alt="" /></p>
+				</section>
+				
+				<section>
+					<h2>Rebasing commits</h2>
+					<p><img src="images/httpatomoreillycomsourceoreillyimages1286992.png" alt="" /></p>
+					<pre><code>$ git rebase --onto master maint^ feature</code></pre>
+					<p><img src="images/httpatomoreillycomsourceoreillyimages1286994.png" alt="" /></p>
+				</section>
+				
+				<section>
+					<h2>Rebasing commits</h2>
+					<ul>
+						<li>The rebase operation creates new commits</li>
+						<li>To rebase you should have clean working directory</li>
+						<li>Each commit is merged one by one and when a conflict occures the rebase operation is paused</li>
+						<li>git rebase --continue, git rebase --abort, git rebase --skip</li>
+						<li>git rebase --preserve-merges</li>
+						<!--<li>the default base commit is the upstream top commit</li>-->
+					</ul>
+				</section>
+				
+				<section>
+					<h2>Rebasing commits – cleaning up history</h2>
+					<p>git rebase -i (demo)</p>
+				</section>
+				
+				<section>
+					<h2>Linus wisdom</h2>
+					<blockquote>I want clean history, but that really means (a) clean and (b) history.</blockquote>
+				</section>
+
+				<section>
+					<h2>Linus wisdom</h2>
+
+					<blockquote>People can (and probably should) rebase their _private_ trees (their own
+						work). That's a _cleanup_. But never other peoples code. That's a "destroy history"</blockquote>
+				</section>
+
+				<section>
+					<h2>Linus wisdom</h2>
+
+					<blockquote>You must never EVER destroy other peoples history. You must not rebase
+						commits other people did. Basically, if it doesn't have your sign-off
+						on it, it's off limits: you can't rebase it, because it's not yours.</blockquote>
+				</section>
+
+				<section>
+					<h2>Linus wisdom</h2>
+					<blockquote><p>Keep your own history readable<p>
+
+<p>Some people do this by just working things out in their head first, and 
+not making mistakes. but that's very rare, and for the rest of us, we 
+use "git rebase" etc while we work on our problems.</p></blockquote>
+				</section>
+
+				<section>
+					<h2>Linus wisdom</h2>
+
+					<blockquote><p>Don't expose your crap.</p>
+
+						<p>This means: if you're still in the "git rebase" phase, you don't push
+							it out. If it's not ready, you send patches around, or use private git
+							trees (just as a "patch series replacement") that you don't tell the
+							public at large about.</p></blockquote>
+				</section>
+				
+				<section>
+					<h2>Linus wisdom</h2>
+					<blockquote><p>Don't merge upstream code at random points.</p>
+
+<p>You should _never_ pull my tree at random points (this was my biggest 
+issue with early git users - many developers would just pull my current 
+random tree-of-the-day into their development trees). It makes your 
+tree just a random mess of random development. Don't do it!</p></blockquote>
+					<blockquote>But if you want to sync up with major releases, do a
+
+git pull linus-repo v2.6.29</blockquote>
+				</section>
+
+				<section>
+					<h2>Aliases</h2>
+
+					<pre><code>git config --global alias.ss "status -s"</code></pre>
+					<pre class="fragment"><code>git config --global alias.grog 'log --graph --abbrev-commit --decorate --all --format=format:"%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(dim white) - %an%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n %C(white)%s%C(reset)"'</code></pre>
+				</section>
+
+				<section>
+					<h2>git reflog</h2>
+				</section>
+
+				<section>
+					<h2>git bisect</h2>
+				</section>
+
+				<section>
+					<h2>git stash</h2>
+
+					<ul class="fragment">
+						<li>--keep-index</li>
+						<li>--include-untracked (-u)</li>
+						<li>--all</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>git describe</h2>
+				</section>
+
+				<section>
+					<h2>git worktree</h2>
+				</section>
+
+				<section>
+					<h2>Remote Repositories</h2>
+
+					<ul>
+						<li>git remote add &lt;remote&gt; &lt;uri&gt; – can add multiple remotes</li>
+						<li class="fragment">git remote show &lt;remote&gt;</li>
+						<li class="fragment">For each <code>branch</code> of &lt;remote&gt; a ref named <code>remote/branch</code> is created in the local repo</li>
+						<li class="fragment">These are called <em>remote-tracking branches</em> and are created and updated on fetch</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Remote Repositories</h2>
+					<ul>
+						<li>git clone &lt;uri&gt;
+							<ul>
+								<li>Creates an <em>origin</em> that points to the remote repo</li>
+								<li>Fetches the branches and the objects from the remote</li>
+								<li>Checkouts the master branch and sets it to track origin/master</li>
+								<li class="fragment">--bare — the local repository doesn’t have working directory, index and HEAD. Appropriate for non-developer repositories</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Tracking branches</h2>
+
+					<ul>
+						<li>Local branches with a relation to an upstream branch</li>
+						<li class="fragment">Created automatically with git checkout &lt;remote-branch-name&gt;</li>
+						<li class="fragment">git push -u origin &lt;branch-name&gt;</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Pushing</h2>
+
+					<ul>
+						<li>git push &lt;remote&gt; [&lt;local-branch&gt;:]&lt;remote-branch&gt;</li>
+						<li class="fragment">git push – when on tracking branch</li>
+						<li class="fragment">Works only if the remote branch can be fast-forwarded</li>
+						<li class="fragment">push --force[-with-lease]</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Working with remotes</h2>
+					<ul>
+						<li>git pull — git fetch + get merge FETCH_HEAD</li>
+						<li>git pull --rebase — git fetch + git rebase FETCH_HEAD</li>
+						<li>git pull --rebase=preserve — git fetch + git rebase --preserve-merges FETCH_HEAD</li>
+						<li>set <em>pull.rebase</em> config to <em>preserve</em></li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>git submodule</h2>
+
+					<ul class="fragment">
+						<li>git submodule add &lt;remote&gt;</li>
+						<li>git submodule init</li>
+						<li>git submodule update</li>
+						<li>git clone --recurse-submodules &lt;remote&gt;</li>
+						<li>git diff --submodule</li>
+						<li>git submodule update --remote</li>
+					</ul>
+				</section>
+				
+				<section>
+					<section>
+						<h2>Workflows</h2>
+						<h3>Repositories organization</h3>
+						<ul>
+							<li>Centralized workflow</li>
+							<li>Integration-Manager workflow</li>
+							<li>“Decentralized but centralized” workflow (the one Gitflow uses)</li>
+							<li>Linux workflow (a.k.a. Dictator and Lieutenants Workflow)</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Centralized workflow</h2>
+						<p><img src="images/18333fig0501-tn.png" alt="" />
+					</section>
+					
+					<section>
+						<h2>Integration-Manager workflow</h2>
+						<p><img src="images/18333fig0502-tn.png" alt="" />
+					</section>
+					
+					<section>
+						<h2>“Decentralized but centralized”</h2>
+						<p><img src="images/centr-decentr.png" alt="" />
+					</section>
+					
+					<section>
+						<h2>Linux workflow</h2>
+						<p><img src="images/18333fig0503-tn.png" alt="" />
+					</section>
+				</section>
+				
+				<section>
+					<section>
+						<h2>Workflows</h2>
+						<h3>Branches organization</h3>
+						<ul>
+							<li>Gitflow</li>
+							<li>git.git workflow</li>
+							<li>GitHub Flow</li>
+						</ul>
+					</section>
+					<section>
+						<h2>git.git workflow</h2>
+						<ul>
+							<li>Feature graduation
+								<ul>
+									<li>maint — tracks the commits that should go into the next “maintenance release”, i.e., update of the last released stable version;</li>
+									<li>master — tracks the commits that should go into the next release;</li>
+									<li>next — intended as a testing branch for topics being tested for stability for master.</li>
+									<li>pu (proposed updates) — an integration branch for things that are not quite ready for inclusion yet.</li>
+								</ul>
+							</li>
+							<li>Topic branches</li>
+							<li><a href="https://www.kernel.org/pub/software/scm/git/docs/gitworkflows.html">https://www.kernel.org/pub/software/scm/git/docs/gitworkflows.html</a></li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>GitHub Flow</h2>
+						<ul>
+							<li>Anything in the master branch is deployable</li>
+							<li>Create new topic branches off of master</li>
+							<li>Open a pull request at any time</li>
+							<li>Merge only after pull request review</li>
+							<li>Deploy immediately after review</li>
+							<li>Good for teams who are constantly testing and deploying and who ship every day</li>
+							<li><a href="http://scottchacon.com/2011/08/31/github-flow.html">http://scottchacon.com/2011/08/31/github-flow.html</a></li>
+						</ul>
+					</section>
+				</section>		
+
+				<section>
+					<h2>Gitflow</h2>
+					<h3>Main branches</h3>
+					<ul>
+						<li>master — production ready state</li>
+						<li>develop — latest delivered development changes for the next release</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Gitflow</h2>
+					<h3>Supporting branches</h3>
+					<ul>
+						<li>Feature branches</li>
+						<li>Release branches</li>
+						<li>Hotfix branches</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Gitflow — feature branches (a.k.a. topic branches)</h2>
+					<ul>
+						<li>Used to develop a feature</li>
+						<li>Typically exists in developer repos only, not in origin.</li>
+						<li>May branch off from <em>develop</em></li>
+						<li>Must merge back into <em>develop</em></li>
+						<li>Naming convention: <em>feature/*</em></li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Gitflow — creating feature branches</h2>
+					<pre><code>$ git checkout -b feature/myfeature develop
+Switched to a new branch "feature/myfeature"</code></pre>
+				</section>
+
+				<section>
+					<h2>Gitflow — finishing feature branches</h2>
+					<pre><code>$ git checkout develop
+Switched to branch 'develop'
+$ git merge --no-ff feature/myfeature
+Updating ea1b82a..05e9557
+(Summary of changes)
+$ git branch -d feature/myfeature
+Deleted branch myfeature (was 05e9557).</code></pre>
+				</section>
+
+				<section>
+					<h2>Gitflow — creating feature branches</h2>
+					<p><img src="images/fb.png" alt="" /></p>
+				</section>
+
+				<section>
+					<h2>Gitflow — release branches</h2>
+					<ul>
+						<li>Supports preparation for new release</li>
+						<li>Good for final touches, minor bugfixes, prepering the metadata for the release</li>
+						<li>Allows the develop branch to be freed to accept changes for the next release</li>
+						<li>May branch off from <em>develop</em></li>
+						<li>Must merge back into <em>develop</em> and <em>master</em></li>
+						<li>Naming convention: <em>release/*</em></li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Gitflow — creating release branches</h2>
+					<pre><code>$ git checkout -b release/1.2 develop
+Switched to a new branch "release/1.2"
+$ ./bump-version.sh 1.2
+Files modified successfully, version bumped to 1.2.
+$ git commit -a -m "Bumped version number to 1.2"
+[release-1.2 74d9424] Bumped version number to 1.2
+1 files changed, 1 insertions(+), 1 deletions(-)</code></pre>
+				</section>
+
+				<section>
+					<h2>Gitflow — finishing release branches</h2>
+					<pre><code>$ git checkout master
+Switched to branch 'master'
+$ git merge --no-ff release/1.2
+Merge made by recursive.
+(Summary of changes)
+$ git tag -a 1.2
+$ git checkout develop
+Switched to branch 'develop'
+$ git merge --no-ff release/1.2
+Merge made by recursive.
+(Summary of changes)
+$ git branch -d release/1.2
+Deleted branch release/1.2 (was ff452fe).</code></pre>
+				</section>
+
+								<section>
+				<h2>Gitflow — hotfix branches</h2>
+					<ul>
+						<li>Used to fix an undesired state in the master branch, usually a bug</li>
+						<li>May branch off from <em>master</em></li>
+						<li>Must merge back into <em>develop</em> and <em>master</em></li>
+						<li>Naming convention: <em>hotfix/*</em></li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Gitflow — creating hotfix branches</h2>
+					<pre><code>$ git checkout -b hotfix-1.2.1 master
+Switched to a new branch "hotfix/1.2.1"
+$ ./bump-version.sh 1.2.1
+Files modified successfully, version bumped to 1.2.1.
+$ git commit -a -m "Bumped version number to 1.2.1"
+[hotfix-1.2.1 41e61bb] Bumped version number to 1.2.1
+1 files changed, 1 insertions(+), 1 deletions(-</code></pre>
+				</section>
+
+				<section>
+					<h2>Gitflow — finishing hotfix branches</h2>
+					<pre><code>$ git checkout master
+Switched to branch 'master'
+$ git merge --no-ff hotfix/1.2.1
+Merge made by recursive.
+(Summary of changes)
+$ git tag -a 1.2.1
+$ git checkout develop
+Switched to branch 'develop'
+$ git merge --no-ff hotfix/1.2.1
+Merge made by recursive.
+(Summary of changes)
+$ git branch -d hotfix/1.2.1
+Deleted branch hotfix/1.2.1 (was abbe5d6).</code></pre>
+				</section>
+
+				<section>
+					<h2>Gitflow — creating hotfix branches</h2>
+					<p><img src="images/hotfix-branches1.png" alt="" /></p>
+				</section>
+
+				<section>
+					<p><img src="images/Screen-shot-2009-12-24-at-11.32.03.png" alt="" /></p>
+				</section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: false,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || "fade", // default/cube/page/concave/zoom/linear/fade/none
+				transitionSpeed: "fast",
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
