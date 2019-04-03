@@ -41,7 +41,7 @@
 					<blockquote class="fragment">
 						“And if you cannot guarantee that the stuff I put into an SCM comes out exactly the same, you are not worth using”
 					</blockquote>
-					<p class="fragment">“Quite frankly, that pretty much took care of everything out there.”</p>
+					<p class="fragment">“Quite frankly, that pretty much took care of everything out there”</p>
 					<p class="fragment">“The end result was I decided I can write something better than anything out there in two weeks”</p>
 				</section>
 
@@ -52,10 +52,12 @@
 						<li>Performant</li>
 						<li>Trustworthy</li>
 						<li class="fragment">Content tracking system</li>
-						<li class="fragment">Supports branching and merging with ease</li>
+						<li class="fragment">Supports branching and merging with ease<br /><span class="fragment">(keeping the information in a graph)</span></li>
 						<li class="fragment">Relatively easy to build clean history</li>
 						<li class="fragment">Supports many different workflows</li>
 					</ul>
+
+					<blockquote class="fragment">“If you are doing something really fast people start using it differently”</blockquote>
 				</section>
 
 				<section>
@@ -66,22 +68,25 @@
 				<section>
 					<h2>Distribution</h2>
 					<ul>
-						<li>Everyone has a copy of the entire repository</li>
-						<li>No single place is more important than any other</li>
-						<li>Every branch is a fork</li>
-						<li>Everyone works freely in his/her own repository</li>
+						<li>Everyone has a copy of the entire repository<br />– everything they need is on their machine</li>
+						<li class="fragment">No single place is more important than any other<br />– some repos can be “special” only formally<br />(or socially, within a network of trust)</li>
+						<li class="fragment">Everyone works freely in his/her own repository<br />– and they can do anything in it</li>
+						<li class="fragment">Making changes without worries<br />– you can always go back, it’s not public before <code>push</code></li>
+						<li class="fragment">Every branch is a version/a fork</li>
+						<li class="fragment">Performance, no complicated access management,<br />offline work, ...</li>
+						<li class="fragment">Especially helpful for <span class="details">(big)</span> groups at<br />various locations and open source teams</li>
 					</ul>
 				</section>
 
 				<section>
 					<h2>What Will We Learn About?</h2>
 
-					<ul class="fragment">
-						<li>The philosophy of git</li>
-						<li>Git internals</li>
-						<li>Showing/Analysing repository content</li>
-						<li>Managing all the parts of the repository</li>
-						<li>Creating and manipulating commits & content
+					<ul>
+						<li class="fragment">The philosophy of git</li>
+						<li class="fragment">Git internals</li>
+						<li class="fragment">Showing/Analysing repository content</li>
+						<li class="fragment">Managing all the parts of the repository</li>
+						<li class="fragment">Creating and manipulating commits & content
 							<ul>
 								<li>commit</li>
 								<li>cherry-pick</li>
@@ -90,12 +95,12 @@
 								<li>rebase magic and cleaning up history</li>
 							</ul>
 						</li>
-						<li>Merging and conflicts resolution</li>
-						<li>Remote repositories</li>
-						<li>Some fun tools – reflog, bisect, stash, etc</li>
-						<li>Not to be afraid to do something (as there is always a way back)</li>
-						<li>Some good practices</li>
-						<li>Workflows – how to work together as a team</li>
+						<li class="fragment">Merging and conflicts resolution</li>
+						<li class="fragment">Remote repositories</li>
+						<li class="fragment">Some fun tools – reflog, bisect, stash, etc</li>
+						<li class="fragment">Not to be afraid to do something (as there is always a way back)</li>
+						<li class="fragment">Some good practices</li>
+						<li class="fragment">Workflows – how to work together as a team</li>
 					</ul>
 				</section>
 
@@ -111,14 +116,27 @@
 
 				<section>
 					<h2>Objects</h2>
+				</section>
+
+				<section>
+					<h2>Immutable data structures</h2>
+
+					<p class="fragment">They change the way we program</p>
+					<p class="fragment">Especially useful for multi-threaded/distributed systems</p>
+				</section>
+
+				<section>
+					<h2>Objects</h2>
+
 					<ul class="fragment">
 						<li>Blobs</li>
 						<li>Trees</li>
 						<li>Commits</li>
 						<li>Tags</li>
 					</ul>
+
 					<p class="fragment">
-						Every object is immutable <br />
+						Every object is immutable<br />
 						<span class="fragment">and identified by the SHA-1 hash of its content</span>
 					</p>
 				</section>
@@ -128,7 +146,7 @@
 					<ul>
 						<li>A regular file</li>
 						<li>Only its content, without its filename or other metadata</li>
-						<li>Every update on a file is a fully new blob (git doesn't record file-specific history).</li>
+						<li>Every update on a file is a fully new blob (git doesn't record file-specific history)</li>
 					</ul>
 				</section>
 
@@ -292,7 +310,15 @@ Release v0.1</code></pre>
 				</section>
 
 				<section>
-					<p>Everything else is a (configurable) tooling<br />built upon this foundation.</p>
+					<p>Git has low-level tools for managing the repository content</p>
+				</section>
+
+				<section>
+					<p>Everything else is a (configurable) tooling<br />built upon this foundation</p>
+
+					<p class="fragment">A version control system on top of content tracking system</p>
+
+					<p class="fragment">The diffs that the diff, merge, log, etc, tools find are coming from these tools,<br />not from the internal format</p>
 				</section>
 
 				<section>
@@ -318,12 +344,6 @@ Release v0.1</code></pre>
 					<p class="fragment">Git doesn't track renames. It infers them (with a probability).</p>
 					<p class="fragment">Git is efficient in tracing history for both directories and files<br />(Thanks to its model).</p>
 					<p class="fragment">Git tracks content.</p>
-				</section>
-
-				<section>
-					<h2>Configurable</h2>
-
-
 				</section>
 
 				<section>
@@ -468,6 +488,7 @@ double sum(const double* in, int n) {
 						<li><code>develop@{yesterday}</code></li>
 						<li><code>develop@{last Monday}</code></li>
 						<li><code>develop@{3 hours ago}</code></li>
+						<li><code>HEAD@{yesterday}</code></li>
 					</ul>
 				</section>
 
@@ -488,11 +509,11 @@ double sum(const double* in, int n) {
 				<section>
 					<h2>Commit ranges</h2>
 					<ul>
-						<li><code>start..end</code> — the set of commits reachable from end that are not reachable from start.</li>
-						<li class="fragment">e.g. <code>master..origin/master</code> – the commits from origin/master that are not yet merged into master</li>
+						<li><code>start..end</code> — the set of commits reachable from <code>end</code> that are not reachable from <code>start</code>.</li>
+						<li class="fragment">e.g. <code>master..origin/master</code> – the commits from <code>origin/master</code> that are not yet merged into <code>master</code></li>
 						<li class="fragment"><code>master...develop</code> — the symmetric difference between the commits</li>
-						<li class="fragment"><code>git log X</code> – all commits reachable from X</li>
-						<li class="fragment"><code>git log ^X</code> – ignore commits reachable from X</li>
+						<li class="fragment"><code>git log X</code> – all commits reachable from <code>X</code></li>
+						<li class="fragment"><code>git log ^X</code> – ignore commits reachable from <code>X</code></li>
 						<li class="fragment"><code>git log ^develop ^topic master</code></li>
 					</ul>
 				</section>
