@@ -119,7 +119,7 @@
 				</section>
 
 				<section>
-					<h2>Immutable data structures</h2>
+					<h2>Immutable Data Structures</h2>
 
 					<p class="fragment">They change the way we program</p>
 					<p class="fragment">Especially useful for multi-threaded/distributed systems</p>
@@ -287,14 +287,14 @@ Release v0.1</code></pre>
 					<ul>
 						<li>Branches – a builder for history</li>
 						<li>Tags (lightweight and annotated)</li>
+						<li><code>HEAD</code> – points to the current branch/commit.<br />This is local and is not shared with other repository clones</li>
 					</ul>
 
 					<p class="fragment">
-						Branches and the index are <span class="details">(almost)</span> the only mutable data<br />
+						Branches, <code>HEAD</code> and the index are <span class="details">(almost)</span> the only mutable data<br />
 						that is stored in the repo<br />
 						<span class="fragment">(and they work together)</span>
 					</p>
-
 				</section>
 
 				<section>
@@ -318,7 +318,7 @@ Release v0.1</code></pre>
 
 					<p class="fragment">A version control system on top of content tracking system</p>
 
-					<p class="fragment">The diffs that the diff, merge, log, etc, tools find are coming from these tools,<br />not from the internal format</p>
+					<!--<p class="fragment">The diffs that the diff, merge, log, etc, tools find are coming from these tools,<br />not from the internal format</p>-->
 				</section>
 
 				<section>
@@ -341,9 +341,9 @@ Release v0.1</code></pre>
 						<li><code>git grep</code></li>
 					</ul>
 
-					<p class="fragment">Git doesn't track renames. It infers them (with a probability).</p>
-					<p class="fragment">Git is efficient in tracing history for both directories and files<br />(Thanks to its model).</p>
-					<p class="fragment">Git tracks content.</p>
+					<p class="fragment">Git doesn't track renames. It infers them (with a probability)</p>
+					<p class="fragment">Git is efficient in tracing history for both directories and files<br />(Thanks to its model)</p>
+					<p class="fragment">Git tracks content</p>
 				</section>
 
 				<section>
@@ -407,30 +407,58 @@ double sum(const double* in, int n) {
 
 				<section>
 					<h2><code>git blame</code></h2>
+					<p><code>git blame common.c</code></p>
+					<pre><code class="shell">^479376f prod.c    1) #include &lt;math.h&gt;
+^479376f prod.c    2)
+^479376f prod.c    3) double prod(const double* in, int n) {
+^479376f prod.c    4)     int i;
+^479376f prod.c    5)     double acc = 1;
+^479376f prod.c    6)
+^479376f prod.c    7)     for(i = 0; i &lt; n; ++i) {
+^479376f prod.c    8)         acc *= in[i];
+^479376f prod.c    9)     }
+^479376f prod.c   10)
+^479376f prod.c   11)     return acc;
+^479376f prod.c   12) }
+d3a9479f common.c 13)
+d3a9479f common.c 14) double sum(const double* in, int n) {
+d3a9479f common.c 15)     int i;
+d3a9479f common.c 16)     double acc = 0;
+d3a9479f common.c 17)
+d3a9479f common.c 18)     for(i = 0; i &lt; n; ++i) {
+d3a9479f common.c 19)         acc += in[i];
+d3a9479f common.c 20)     }
+d3a9479f common.c 21)
+d3a9479f common.c 22)     return acc;
+d3a9479f common.c 23) }</code></pre>
+				</section>
+
+				<section>
+					<h2><code>git blame</code></h2>
 					<p><code>git blame -C common.c</code></p>
-					<pre><code class="shell">^ae7f28a prod.c  1) #include &lt;math.h&gt;
-^ae7f28a prod.c  2)
-^ae7f28a prod.c  3) double prod(const double* in, int n) {
-^ae7f28a prod.c  4)     int i;
-^ae7f28a prod.c  5)     double acc = 1;
-^ae7f28a prod.c  6)
-^ae7f28a prod.c  7)     for(i = 0; i &lt; n; ++i) {
-^ae7f28a prod.c  8)         acc *= in[i];
-^ae7f28a prod.c  9)     }
-^ae7f28a prod.c 10)
-^ae7f28a prod.c 11)     return acc;
-^ae7f28a prod.c 12) }
-^ae7f28a sum.c  13)
-^ae7f28a sum.c  14) double sum(const double* in, int n) {
-^ae7f28a sum.c  15)     int i;
-^ae7f28a sum.c  16)     double acc = 0;
-^ae7f28a sum.c  17)
-^ae7f28a sum.c  18)     for(i = 0; i &lt; n; ++i) {
-^ae7f28a sum.c  19)         acc += in[i];
-^ae7f28a sum.c  20)     }
-^ae7f28a sum.c  21)
-^ae7f28a sum.c  22)     return acc;
-^ae7f28a sum.c  23) }</code></pre>
+					<pre><code class="shell">^479376f prod.c  1) #include &lt;math.h&gt;
+^479376f prod.c  2)
+^479376f prod.c  3) double prod(const double* in, int n) {
+^479376f prod.c  4)     int i;
+^479376f prod.c  5)     double acc = 1;
+^479376f prod.c  6)
+^479376f prod.c  7)     for(i = 0; i &lt; n; ++i) {
+^479376f prod.c  8)         acc *= in[i];
+^479376f prod.c  9)     }
+^479376f prod.c 10)
+^479376f prod.c 11)     return acc;
+^479376f prod.c 12) }
+^479376f sum.c  13)
+^479376f sum.c  14) double sum(const double* in, int n) {
+^479376f sum.c  15)     int i;
+^479376f sum.c  16)     double acc = 0;
+^479376f sum.c  17)
+^479376f sum.c  18)     for(i = 0; i &lt; n; ++i) {
+^479376f sum.c  19)         acc += in[i];
+^479376f sum.c  20)     }
+^479376f sum.c  21)
+^479376f sum.c  22)     return acc;
+^479376f sum.c  23) }</code></pre>
 				</section>
 
 				<section>
@@ -446,17 +474,21 @@ double sum(const double* in, int n) {
 				</section>
 
 				<section>
-					<p>What if someone else updated the line and you are interested in<br />only part of it?</p>
+					<h2>Searching for a Snippet’s History</h2>
+
+					<p class="fragment">What if someone else updated the line and you are interested in<br />only part of it?</p>
 
 					<div class="fragment">
-						<p>Use git pickaxe:</p>
+						<p>Use “pickaxe”:</p>
 
-						<p><code>git log -S &lt;line-snippet-or-lines-of-code&gt; &lt;path-to-look-in&gt;</code></p>
+						<pre><code class="shell">$ git log -S &lt;string&gt; [path-to-look-in]</code></pre>
+
+						<p class="fragment">The <code>string</code> can be a snippet from a line or even a multiline block of code.</p>
 					</div>
 				</section>
 
 				<section>
-					<h2>Referencing objects</h2>
+					<h2>Referencing Objects</h2>
 
 					<ul>
 						<li>Object’s hash — <code>eed89a6588c0452</code></li>
@@ -465,11 +497,19 @@ double sum(const double* in, int n) {
 				</section>
 
 				<section>
-					<h2>Referencing commits</h2>
+					<h2>Referencing Commits</h2>
 					<ul>
-						<li>Commit’s hash — <code>eed89a6588c0452</code></li>
-						<li>Named refs — branches, tags</li>
-						<li>Special names
+						<li class="fragment">Commit’s hash — <code>eed89a6588c0452</code></li>
+						<li class="fragment">
+							Named refs — branches, tags
+
+							<ul>
+								<li><code>master</code></li>
+								<li><code>origin/master</code></li>
+								<li><code>v2.72</code></li>
+							</ul>
+						</li>
+						<li class="fragment">Special names
 							<ul>
 								<li><code>HEAD</code> — the checkouted commit (or the most recent commit on the current branch)</li>
 								<li><code>ORIG_HEAD</code> — the state of HEAD before certain operations like merge, reset, etc.</li>
@@ -481,33 +521,50 @@ double sum(const double* in, int n) {
 				</section>
 
 				<section>
-					<h2>Referencing commits</h2>
+					<h2>Referencing Commits</h2>
+
+					<p>Upstream:</p>
+
 					<ul>
-						<li><code>@{u}</code> – the upstream branch of HEAD</li>
-						<li><code>develop@{u}</code></li>
+						<li><code>@{u}</code> – the upstream branch of <code>HEAD</code></li>
+						<li><code>develop@{u}</code> – the upstream branch of <code>develop</code></li>
+						<!--<li><code>:/&lt;text&gt;</code> – first commit containing <code>text</code> in its message</li>-->
+					</ul>
+				</section>
+
+				<section>
+					<h2>Referencing Commits</h2>
+
+					<p>Relative names:</p>
+
+					<ul>
+						<li><code>HEAD~2</code></li>
+						<li><code>HEAD^</code></li>
+						<li><code>master~3^2~</code></li>
+					</ul>
+
+					<p><img src="images/httpatomoreillycomsourceoreillyimages1286914.png" alt="" /></p>
+				</section>
+
+				<section>
+					<h2>Referencing Commits</h2>
+
+					<p>From the log:</p>
+
+					<ul>
+						<li><code>develop@{4}</code><br />– the 4th prior value for <code>develop</code> (locally)</li>
+						<li><code>HEAD@{5}</code><br />– the 5th prior value for <code>HEAD</code></li>
 						<li><code>develop@{yesterday}</code></li>
 						<li><code>develop@{last Monday}</code></li>
 						<li><code>develop@{3 hours ago}</code></li>
 						<li><code>HEAD@{yesterday}</code></li>
 					</ul>
+
+					<p class="fragment"><code>git reflog</code> demo</p>
 				</section>
 
 				<section>
-					<h2>Referencing commits</h2>
-					<ul>
-						<li>Relative names
-							<ul>
-								<li><code>HEAD~2</code></li>
-								<li><code>HEAD^</code></li>
-								<li><code>master~3^2~</code></li>
-							</ul>
-						</li>
-					</ul>
-					<p><img src="images/httpatomoreillycomsourceoreillyimages1286914.png" alt="" /></p>
-				</section>
-
-				<section>
-					<h2>Commit ranges</h2>
+					<h2>Commit Ranges</h2>
 					<ul>
 						<li><code>start..end</code> — the set of commits reachable from <code>end</code> that are not reachable from <code>start</code>.</li>
 						<li class="fragment">e.g. <code>master..origin/master</code> – the commits from <code>origin/master</code> that are not yet merged into <code>master</code></li>
@@ -519,10 +576,15 @@ double sum(const double* in, int n) {
 				</section>
 
 				<section>
-					<h2>Referencing files</h2>
+					<h2>Referencing blobs</h2>
+
+					<p><code>git show &lt;commit&gt;:&lt;file&gt;</code></p>
+				</section>
+
+				<section>
+					<h2>Referencing files (for some commands)</h2>
 
 					<ul>
-						<li><code>git show/diff &lt;commit&gt;:&lt;file&gt;</code></li>
 						<li><code>git log &lt;commit&gt; -- &lt;file&gt;</code></li>
 						<li><code>git checkout &lt;commit&gt; -- &lt;file&gt;</code></li>
 					</ul>
@@ -532,14 +594,35 @@ double sum(const double* in, int n) {
 					<h2>Managing</h2>
 
 					<ul>
-						<li>the index</li>
 						<li>the working directory</li>
+						<li>the index</li>
 						<li>the current branch</li>
 					</ul>
 				</section>
 
 				<section>
-					<h2>Managing the index</h2>
+					<h2>Managing the Working Directory<br />&amp; What <code>HEAD</code> Points To</h2>
+
+					<ul>
+						<li class="fragment">Just update the files</li>
+						<li class="fragment">
+							<code>git checkout</code>
+
+							<ul>
+								<li class="fragment">switch <code>HEAD</code> to a branch/commit, <strong class="fragment">and/or</strong></li>
+								<li class="fragment">restore files from index/a ref</li>
+							</ul>
+						</li>
+						<li class="fragment"><code>git checkout &lt;ref&gt;</code> — update <code>HEAD</code>, the index and the working directory to match that ref</li>
+						<li class="fragment">Switching <code>HEAD</code> would never allow you to lose changes in the working directory</li>
+						<li class="fragment"><code>git checkout -b &lt;branch-name&gt; [ref]</code> — create new branch from <code>ref</code> (or <code>HEAD</code>) and checkout it</li>
+						<li class="fragment"><code>git checkout [ref] &lt;paths&gt;</code> — retrieve a file from the index/the ref</li>
+						<li class="fragment"><code>git clean -f -d</code></li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Managing the Index</h2>
 					<ul>
 						<li>
 							<code>git add &lt;filepattern&gt;</code>
@@ -548,15 +631,26 @@ double sum(const double* in, int n) {
 								<li><code>git add -i [filepattern]</code> – interactive add</li>
 							</ul>
 						</li>
-						<li class="fragment"><code>git rm &lt;filepattern&gt;</code></li>
-						<li class="fragment"><code>git mv &lt;source&gt; &lt;destination&gt;</code></li>
-						<li class="fragment"><code>&lt;filepattern&gt;</code> — <code>'*.java', 'a/bc/d/*.xml'</code></li>
+						<li class="fragment"><code>filepattern</code> — <code>'*.java', 'a/bc/d/*.xml'</code></li>
+						<li class="fragment">
+							<code>git rm &lt;filepattern&gt;</code><br />
+							<!--<span class="fragment">==<br/><code>rm &lt;filepattern&gt;<br />git add &lt;filepattern&gt;</code></span>-->
+						</li>
+						<li class="fragment">
+							<code>git mv &lt;source&gt; &lt;destination&gt;</code><br />
+							<!--<span class="fragment">==<br/><code>-->
+								<!--mv &lt;source&gt;  &lt;destination&gt;<br />-->
+								<!--git add &lt;source&gt; &lt;destination&gt;-->
+							<!--</code></span>-->
+						</li>
 					</ul>
 				</section>
 
 				<section>
-					<h2>Managing the index</h2>
+					<h2>Managing the Index</h2>
+
 					<h3>File classification</h3>
+
 					<ul>
 						<li>Tracked</li>
 						<li>Ignored</li>
@@ -565,16 +659,7 @@ double sum(const double* in, int n) {
 				</section>
 
 				<section>
-					<h2>Managing the working directory</h2>
-					<ul>
-						<li><code>git checkout [ref] &lt;paths&gt;</code> — from the index/the ref</li>
-						<li><code>git checkout [ref]</code> — update HEAD, the index and the working directory to match that ref</li>
-						<li><code>git clean -f -d</code></li>
-					</ul>
-				</section>
-
-				<section>
-					<h2>Managing the current branch</h2>
+					<h2>Managing the Current Branch</h2>
 
 					<ul>
 						<li><code>git commit</code><br /> – new commit from the index</li>
@@ -587,33 +672,21 @@ double sum(const double* in, int n) {
 					</ul>
 				</section>
 
-				<!--<section>-->
-					<!--<h2>Other tools and topics</h2>-->
-
-					<!--<ul>-->
-						<!--<li>Remoting</li>-->
-						<!--<li>git reflog</li>-->
-						<!--<li>git bisect</li>-->
-						<!--<li>git stash</li>-->
-						<!--<li>submodules</li>-->
-						<!--<li>workflows</li>-->
-					<!--</ul>-->
-				<!--</section>-->
-
 				<section>
-					<p>git commit</p>
+					<h2><code>git commit</code></h2>
 
 					<p class="fragment">What happens?</p>
 				</section>
 
 				<section>
-					<h2>Commit messages</h2>
+					<h2>Commit Messages</h2>
 
 					<p class="fragment"><a href="https://chris.beams.io/posts/git-commit/">How to Write a Git Commit Message</a></p>
 				</section>
 
 				<section>
-					<h2>Commit messages</h2>
+					<h2>Commit Messages</h2>
+
 					<pre><code>Summarize changes in around 50 characters or less
 
 More detailed explanatory text, if necessary. Wrap it to about 72
@@ -644,7 +717,7 @@ See also: #456, #789</code></pre>
 				</section>
 
 				<section>
-					<h2>Commit messages</h2>
+					<h2>Commit Messages</h2>
 
 					<ol>
 						<li>Separate subject from body with a blank line</li>
@@ -665,29 +738,33 @@ See also: #456, #789</code></pre>
 
 				<section>
 					<p>Git already provides such style of messages for its operations — merge, revert, etc</p>
+
+					<pre><code>Merge branch 'k8s-setup'</code></pre>
+					<pre><code>Merge branch 'cool-new-feature' into develop</code></pre>
 				</section>
 
 				<section>
-					<h2>Changing last commit</h2>
+					<h2>Changing the Last Commit</h2>
 
-					<p>git commit --amend</p>
+					<p><code>git commit --amend</code></p>
 				</section>
 
 				<section>
-					<h2>Changing to a known state</h2>
+					<h2>Changing to a Known State</h2>
+
 					<ul>
-						<li>git reset --soft <em>[commit]</em>
+						<li><code>git reset --soft [commit]</code>
 							<ul>
 								<li>points the current branch to that commit</li>
 							</ul>
 						</li>
-						<li class="fragment">git reset --mixed <em>[commit]</em> (the default)
+						<li class="fragment"><code>git reset --mixed [commit]</code> (the default)
 							<ul>
 								<li>points the current branch to that commit</li>
 								<li>changes the index to the tree in that commit</li>
 							</ul>
 						</li>
-						<li class="fragment">git reset --hard <em>[commit]</em>
+						<li class="fragment"><code>git reset --hard [commit]</code>
 							<ul>
 								<li>points the current branch to that commit</li>
 								<li>changes the index to the tree in that commit</li>
@@ -699,7 +776,7 @@ See also: #456, #789</code></pre>
 
 				<section>
 					<h2>Merge</h2>
-					<pre><code>$ git checkout branch
+					<pre><code class="shell">$ git checkout branch
 $ git merge other-branch</code></pre>
 					<pre><code>Merge branch 'release/0.2.4' into develop
 
@@ -708,18 +785,11 @@ $ git merge other-branch</code></pre>
 				</section>
 
 				<section>
-					<h2>Merge conflicts</h2>
-					<ul>
-						<li>For each conflicted file the index contains the merge base version, “our” version and “their” version</li>
-						<li>git log --merge --left-right -p</li>
-						<li>git checkout --ours</li>
-						<li>git checkout --theirs</li>
-						<li>git merge --abort</li>
-					</ul>
+					<h2>Merge Strategies</h2>
 				</section>
 
 				<section>
-					<h2>Degenerate merge strategies</h2>
+					<h2>Degenerate Merge Strategies</h2>
 					<ul>
 						<li>Already up-to-date</li>
 						<li>Fast-forward (disallow with --no-ff)</li>
@@ -727,39 +797,96 @@ $ git merge other-branch</code></pre>
 				</section>
 
 				<section>
-					<h2>Two way merge<br /><span class="fragment">– not used by Git</span></h2>
+					<h2>Resolve Merge Strategy</h2>
+
+					<p>Merges two branches into a merge commit.</p>
+
+					<p><img src="images/basicmerge.png" alt="" />
+				</section>
+
+				<section>
+					<h2>Resolve Merge Strategy</h2>
+
+					<p>Git analyses the history of the two branches and:</p>
+
+					<ul>
+						<li class="fragment">If a file is updated or created in only one of the branches<br />– directly use it in the merge commit</li>
+						<li class="fragment">If a file is updated in one of the branches and deleted in the other<br />– conflict</li>
+						<li class="fragment">If a file is updated in both branches<br />– call the files’ <strong>merge driver</strong> (basically a diff tool)</li>
+					</ul>
+
+					<p class="fragment">By default git also detects file renames and correctly matches the file in the two branches</p>
+				</section>
+
+				<section>
+					<h2>The Merge Driver?</h2>
+				</section>
+
+				<section>
+					<h2>Two-Way Merge<br /><span class="fragment">– not used by Git</span></h2>
 
 					<p class="fragment"><img src="images/figure-5.png" /></p>
 				</section>
 
 				<section>
-					<h2>Resolve merge strategy</h2>
-					<p>Three way merge between the merge base and the two branches</p>
-					<p><img src="images/basicmerge.png" alt="" />
+					<h2>Three-Way Merge</h2>
+
+					<p class="fragment">between the merge base version and the version in the two branches</p>
+
+					<div class="fragment">
+						<p>git automatically calls something like:</p>
+
+						<pre><code class="shell">$ git merge-file &lt;ours-version&gt; &lt;base-version&gt; &lt;theirs-version&gt;</code></pre>
+					</div>
 				</section>
 
 				<section>
-					<h2>Resolve merge strategy</h2>
+					<h2>Three-Way Merge</h2>
 					<p><img src="images/fearofmerging-figure-2.jpg" alt="" />
 				</section>
 
 				<section>
-					<h2>Recursive merge strategy</h2>
+					<h2>The State After a Merge Conflict</h2>
+
+					<p>For each conflicted file the index contains the merge base version, “ours” version and “theirs” version</p>
+
+					<pre><code>$ git show :1:file.scala > file.base.scala
+$ git show :2:file.scala > file.ours.scala
+$ git show :3:file.scala > file.theirs.scala</code></pre>
+				</section>
+
+				<section>
+					<h2>The State After a Merge Conflict</h2>
+
+					<ul>
+						<li>git log --merge --left-right -p</li>
+						<li>git checkout --ours &lt;files&gt;</li>
+						<li>git checkout --theirs &lt;files&gt;</li>
+						<li>git merge --abort</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Recursive Merge Strategy</h2>
+
 					<p>The default. Minimizes conflicts</p>
 				</section>
 
 				<section>
-					<h2>Recursive merge strategy</h2>
+					<h2>Recursive Merge Strategy</h2>
+
 					<p><img src="images/recursivemergesample00.png" alt="" />
 				</section>
 
 				<section>
-					<h2>Recursive merge strategy</h2>
+					<h2>Recursive Merge Strategy</h2>
+
 					<p><img src="images/recursivemergesample01.png" alt="" />
 				</section>
 
 				<section>
-					<h2>Other merge strategies</h2>
+					<h2>Other Merge Strategies</h2>
+
 					<ul>
 						<li>Octopus</li>
 						<li>Ours</li>
@@ -769,7 +896,8 @@ $ git merge other-branch</code></pre>
 				</section>
 
 				<section>
-					<h2>Merge tool</h2>
+					<h2>Merge Tool</h2>
+
 					<ul>
 						<li>merge.tool config</li>
 						<li>git mergetool <em>[file...]</em></li>
@@ -778,18 +906,19 @@ $ git merge other-branch</code></pre>
 				</section>
 
 				<section>
-					<h2>Picking individual commits</h2>
+					<h2>Picking Individual Commits</h2>
+
 					<ul>
-						<li>git cherry-pick &lt;commit&gt; — apply that commit to the current HEAD (and update the branch)</li>
-						<li class="fragment">git cherry-pick start^..end — apply the commits in the range start^..end to the current HEAD (and update the branch)</li>
+						<li><code>git cherry-pick &lt;commit&gt;</code> — apply that commit to the current <code>HEAD</code> (and update the branch)</li>
+						<li class="fragment"><code>git cherry-pick start^..end</code> — apply the commits in the range start^..end to the current <code>HEAD</code> (and update the branch)</li>
 					</ul>
 				</section>
 
 				<section>
-					<h2>Reverting commits</h2>
+					<h2>Reverting Commits</h2>
 					<ul>
-						<li>git revert &lt;commit&gt; - creates a new commit that undoes the changes in the specified commit</li>
-						<li>git revert start^..end — for each commit in the range create a new commit that undoes it</li>
+						<li><code>git revert &lt;commit&gt;</code> - creates a new commit that undoes the changes in the specified commit</li>
+						<li><code>git revert start^..end</code> — for each commit in the range create a new commit that undoes it</li>
 					</ul>
 					<pre><code>Revert "Show the end screen when the video is paused"
 
@@ -797,21 +926,28 @@ This reverts commit f3db63c38b879deda3c8656df847fbb26a31c0ea.</code></pre>
 				</section>
 
 				<section>
-					<h2>Reverting merge commits</h2>
+					<h2>Reverting Merge Commits</h2>
+
 					<pre><code> ---o---o---o---M---x---x
 	       /
        ---A---B</code></pre>
+
 					<p class="fragment">git revert -m 1 <em>M</em></p>
+
 					<pre class="fragment"><code> ---o---o---o---M---x---x---W
 	       /
        ---A---B</code></pre>
+
+					<p class="fragment">What if now we want to merge the feature again?</p>
+
 					<pre class="fragment"><code>$ git merge feature
 Already up-to-date.</code></pre>
 				</section>
 
 				<section>
-					<h2>Reverting merge commits</h2>
-					<p>Fix the branch</p>
+					<h2>Reverting Merge Commits</h2>
+
+					<p>Fix the branch, revert the revert on merge</p>
 					<pre><code> ---o---o---o---M---x---x---W---x
 	       /
        ---A---B-------------------C---D</code></pre>
@@ -833,10 +969,11 @@ Merge made by recursive.
 				</section>
 
 				<section>
-					<h2>Reverting merge commits</h2>
+					<h2>Reverting Merge Commits</h2>
+
 					<p>Fix on a new branch</p>
 
-					<pre><code>$ git checkout feature-prime
+					<pre><code>$ git checkout -b feature-prime
 $ git revert W
 ...
 $ git merge feature-prime</code></pre>
@@ -847,7 +984,8 @@ $ git merge feature-prime</code></pre>
 				</section>
 
 				<section>
-					<h2>Reverting merge commits</h2>
+					<h2>Reverting Merge Commits</h2>
+
 					<p>Rebase the branch</p>
 
 					<pre><code> ---o---o---o---M---x---x---W---x---x---x---x---*
@@ -856,12 +994,14 @@ $ git merge feature-prime</code></pre>
 				</section>
 
 				<section>
-					<h2>Reverting merge commits</h2>
+					<h2>Reverting Merge Commits</h2>
+
 					<p>If a fix is quick enough you can also just fix the problem instead of reverting the whole merge</p>
 				</section>
 
 				<section>
-					<h2>Rebasing commits</h2>
+					<h2>Rebasing Commits</h2>
+
 					<p><img src="images/httpatomoreillycomsourceoreillyimages1286988.png" alt="" /></p>
 					<pre><code>$ git checkout topic
 $ git rebase master</code></pre>
@@ -869,43 +1009,46 @@ $ git rebase master</code></pre>
 				</section>
 
 				<section>
-					<h2>Rebasing commits</h2>
+					<h2>Rebasing Commits</h2>
+
 					<p><img src="images/httpatomoreillycomsourceoreillyimages1286992.png" alt="" /></p>
 					<pre><code>$ git rebase --onto master maint^ feature</code></pre>
 					<p><img src="images/httpatomoreillycomsourceoreillyimages1286994.png" alt="" /></p>
 				</section>
 
 				<section>
-					<h2>Rebasing commits</h2>
+					<h2>Rebasing Commits</h2>
+
 					<ul>
 						<li>The rebase operation creates new commits</li>
 						<li>To rebase you should have clean working directory</li>
 						<li>Each commit is merged one by one and when a conflict occures the rebase operation is paused</li>
-						<li>git rebase --continue, git rebase --abort, git rebase --skip</li>
-						<li>git rebase --preserve-merges</li>
+						<li><code>git rebase --continue</code>,<br /><code>git rebase --abort</code>,<br /><code>git rebase --skip</code></li>
+						<li><code>git rebase --preserve-merges</code></li>
 						<!--<li>the default base commit is the upstream top commit</li>-->
 					</ul>
 				</section>
 
 				<section>
-					<h2>Rebasing commits – cleaning up history</h2>
+					<h2>Rebasing Commits – Cleaning Up History</h2>
+
 					<p>git rebase -i (demo)</p>
 				</section>
 
 				<section>
-					<h2>Linus wisdom</h2>
+					<h2>Linus’ Wisdom</h2>
 					<blockquote>I want clean history, but that really means (a) clean and (b) history.</blockquote>
 				</section>
 
 				<section>
-					<h2>Linus wisdom</h2>
+					<h2>Linus’ Wisdom</h2>
 
 					<blockquote>People can (and probably should) rebase their _private_ trees (their own
 						work). That's a _cleanup_. But never other peoples code. That's a "destroy history"</blockquote>
 				</section>
 
 				<section>
-					<h2>Linus wisdom</h2>
+					<h2>Linus’ Wisdom</h2>
 
 					<blockquote>You must never EVER destroy other peoples history. You must not rebase
 						commits other people did. Basically, if it doesn't have your sign-off
@@ -913,7 +1056,8 @@ $ git rebase master</code></pre>
 				</section>
 
 				<section>
-					<h2>Linus wisdom</h2>
+					<h2>Linus’ Wisdom</h2>
+
 					<blockquote><p>Keep your own history readable<p>
 
 <p>Some people do this by just working things out in their head first, and
@@ -922,7 +1066,7 @@ use "git rebase" etc while we work on our problems.</p></blockquote>
 				</section>
 
 				<section>
-					<h2>Linus wisdom</h2>
+					<h2>Linus’ Wisdom</h2>
 
 					<blockquote><p>Don't expose your crap.</p>
 
@@ -933,14 +1077,15 @@ use "git rebase" etc while we work on our problems.</p></blockquote>
 				</section>
 
 				<section>
-					<h2>Linus wisdom</h2>
+					<h2>Linus’ Wisdom</h2>
+
 					<blockquote><p>Don't merge upstream code at random points.</p>
 
 <p>You should _never_ pull my tree at random points (this was my biggest
 issue with early git users - many developers would just pull my current
 random tree-of-the-day into their development trees). It makes your
 tree just a random mess of random development. Don't do it!</p></blockquote>
-					<blockquote>But if you want to sync up with major releases, do a
+					<blockquote class="fragment">But if you want to sync up with major releases, do a
 
 git pull linus-repo v2.6.29</blockquote>
 				</section>
