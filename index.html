@@ -79,6 +79,39 @@
 				</section>
 
 				<section>
+					<section>
+						<h2>Distributed Workflows</h2>
+						<h3>Repositories organization</h3>
+<!--						<ul>-->
+<!--							<li>Centralized workflow</li>-->
+<!--							<li>Integration-Manager workflow</li>-->
+<!--							<li>“Decentralized but centralized” workflow (the one Gitflow uses)</li>-->
+<!--							<li>Linux workflow (a.k.a. Dictator and Lieutenants Workflow)</li>-->
+<!--						</ul>-->
+					</section>
+
+					<section>
+						<h2>Centralized workflow</h2>
+						<p><img src="images/18333fig0501-tn.png" alt="" />
+					</section>
+
+					<section>
+						<h2>“Decentralized but centralized”</h2>
+						<p><img src="images/centr-decentr.png" alt="" />
+					</section>
+
+					<section>
+						<h2>Integration-Manager workflow</h2>
+						<p><img src="images/18333fig0502-tn.png" alt="" />
+					</section>
+
+					<section>
+						<h2>Linux workflow</h2>
+						<p><img src="images/18333fig0503-tn.png" alt="" />
+					</section>
+				</section>
+
+				<section>
 					<h2>What Will We Learn About?</h2>
 
 					<ul>
@@ -253,6 +286,22 @@ Release v0.1</code></pre>
 				</section>
 
 				<section>
+					<h2>Refs</h2>
+
+					<ul>
+						<li>Branches – a builder for history</li>
+						<li>Tags (lightweight and annotated)</li>
+						<li><code>HEAD</code> – points to the current branch/commit.<br />This is local and is not shared with other repository clones</li>
+					</ul>
+
+					<p class="fragment">
+						Branches, <code>HEAD</code> and the index are <span class="details">(almost)</span> the only mutable data<br />
+						that is stored in the repo<br />
+						<span class="fragment">(and they work together)</span>
+					</p>
+				</section>
+
+				<section>
 					<h2>Index</h2>
 
 					<pre><code class="shell">$ git ls-files -s
@@ -279,22 +328,6 @@ Release v0.1</code></pre>
 
 				<section>
 					<h2>Objects Demo</h2>
-				</section>
-
-				<section>
-					<h2>Refs</h2>
-
-					<ul>
-						<li>Branches – a builder for history</li>
-						<li>Tags (lightweight and annotated)</li>
-						<li><code>HEAD</code> – points to the current branch/commit.<br />This is local and is not shared with other repository clones</li>
-					</ul>
-
-					<p class="fragment">
-						Branches, <code>HEAD</code> and the index are <span class="details">(almost)</span> the only mutable data<br />
-						that is stored in the repo<br />
-						<span class="fragment">(and they work together)</span>
-					</p>
 				</section>
 
 				<section>
@@ -1190,39 +1223,6 @@ git pull linus-repo v2.6.29</blockquote>
 						<li>git diff --submodule</li>
 						<li>git submodule update --remote</li>
 					</ul>
-				</section>
-
-				<section>
-					<section>
-						<h2>Workflows</h2>
-						<h3>Repositories organization</h3>
-						<ul>
-							<li>Centralized workflow</li>
-							<li>Integration-Manager workflow</li>
-							<li>“Decentralized but centralized” workflow (the one Gitflow uses)</li>
-							<li>Linux workflow (a.k.a. Dictator and Lieutenants Workflow)</li>
-						</ul>
-					</section>
-
-					<section>
-						<h2>Centralized workflow</h2>
-						<p><img src="images/18333fig0501-tn.png" alt="" />
-					</section>
-
-					<section>
-						<h2>Integration-Manager workflow</h2>
-						<p><img src="images/18333fig0502-tn.png" alt="" />
-					</section>
-
-					<section>
-						<h2>“Decentralized but centralized”</h2>
-						<p><img src="images/centr-decentr.png" alt="" />
-					</section>
-
-					<section>
-						<h2>Linux workflow</h2>
-						<p><img src="images/18333fig0503-tn.png" alt="" />
-					</section>
 				</section>
 
 				<section>
