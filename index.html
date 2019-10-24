@@ -870,6 +870,8 @@ $ git merge other-branch</code></pre>
 						<p>git automatically calls something like:</p>
 
 						<pre><code class="shell">$ git merge-file &lt;ours-version&gt; &lt;base-version&gt; &lt;theirs-version&gt;</code></pre>
+
+						<p class="fragment">The merging algorithm doesn't try to be sophisticated, but predictable instead.</p>
 					</div>
 				</section>
 
@@ -944,6 +946,7 @@ $ git show :3:file.scala > file.theirs.scala</code></pre>
 					<ul>
 						<li><code>git cherry-pick &lt;commit&gt;</code> — apply that commit to the current <code>HEAD</code> (and update the branch)</li>
 						<li class="fragment"><code>git cherry-pick start^..end</code> — apply the commits in the range start^..end to the current <code>HEAD</code> (and update the branch)</li>
+						<li class="fragment">Merge base for conflicts – the version in the parent of the cherry-picked commit</li>
 					</ul>
 				</section>
 
@@ -956,6 +959,10 @@ $ git show :3:file.scala > file.theirs.scala</code></pre>
 					<pre><code>Revert "Show the end screen when the video is paused"
 
 This reverts commit f3db63c38b879deda3c8656df847fbb26a31c0ea.</code></pre>
+
+					<ul>
+						<li class="fragment">Merge base for conflicts is the commit itself, what's merged is it's parent commit</li>
+					</ul>
 				</section>
 
 				<section>
@@ -1054,10 +1061,10 @@ $ git rebase master</code></pre>
 
 					<ul>
 						<li>The rebase operation creates new commits</li>
-						<li>To rebase you should have clean working directory</li>
-						<li>Each commit is merged one by one and when a conflict occures the rebase operation is paused</li>
-						<li><code>git rebase --continue</code>,<br /><code>git rebase --abort</code>,<br /><code>git rebase --skip</code></li>
-						<li><code>git rebase --preserve-merges</code></li>
+						<li class="fragment">To rebase you should have clean working directory</li>
+						<li class="fragment">Each commit is merged one by one and when a conflict occures the rebase operation is paused</li>
+						<li class="fragment"><code>git rebase --continue</code>,<br /><code>git rebase --abort</code>,<br /><code>git rebase --skip</code></li>
+						<li class="fragment"><code>git rebase --rebase-merges</code></li>
 						<!--<li>the default base commit is the upstream top commit</li>-->
 					</ul>
 				</section>
@@ -1128,10 +1135,6 @@ git pull linus-repo v2.6.29</blockquote>
 
 					<pre><code>git config --global alias.ss "status -s"</code></pre>
 					<pre class="fragment"><code>git config --global alias.grog 'log --graph --abbrev-commit --decorate --all --format=format:"%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(dim white) - %an%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n %C(white)%s%C(reset)"'</code></pre>
-				</section>
-
-				<section>
-					<h2>git reflog</h2>
 				</section>
 
 				<section>
@@ -1207,8 +1210,7 @@ git pull linus-repo v2.6.29</blockquote>
 					<ul>
 						<li>git pull — git fetch + get merge FETCH_HEAD</li>
 						<li>git pull --rebase — git fetch + git rebase FETCH_HEAD</li>
-						<li>git pull --rebase=preserve — git fetch + git rebase --preserve-merges FETCH_HEAD</li>
-						<li>set <em>pull.rebase</em> config to <em>preserve</em></li>
+						<li>git pull --rebase=merges — git fetch + git rebase --rebase-merges FETCH_HEAD</li>
 					</ul>
 				</section>
 
@@ -1226,184 +1228,54 @@ git pull linus-repo v2.6.29</blockquote>
 				</section>
 
 				<section>
-					<section>
-						<h2>Workflows</h2>
-						<h3>Branches organization</h3>
-						<ul>
-							<li>Gitflow</li>
-							<li>git.git workflow</li>
-							<li>GitHub Flow</li>
-						</ul>
-					</section>
-					<section>
-						<h2>git.git workflow</h2>
-						<ul>
-							<li>Feature graduation
-								<ul>
-									<li>maint — tracks the commits that should go into the next “maintenance release”, i.e., update of the last released stable version;</li>
-									<li>master — tracks the commits that should go into the next release;</li>
-									<li>next — intended as a testing branch for topics being tested for stability for master.</li>
-									<li>pu (proposed updates) — an integration branch for things that are not quite ready for inclusion yet.</li>
-								</ul>
-							</li>
-							<li>Topic branches</li>
-							<li><a href="https://www.kernel.org/pub/software/scm/git/docs/gitworkflows.html">https://www.kernel.org/pub/software/scm/git/docs/gitworkflows.html</a></li>
-						</ul>
-					</section>
-
-					<section>
-						<h2>GitHub Flow</h2>
-						<ul>
-							<li>Anything in the master branch is deployable</li>
-							<li>Create new topic branches off of master</li>
-							<li>Open a pull request at any time</li>
-							<li>Merge only after pull request review</li>
-							<li>Deploy immediately after review</li>
-							<li>Good for teams who are constantly testing and deploying and who ship every day</li>
-							<li><a href="http://scottchacon.com/2011/08/31/github-flow.html">http://scottchacon.com/2011/08/31/github-flow.html</a></li>
-						</ul>
-					</section>
+					<h2>Workflows</h2>
 				</section>
 
 				<section>
-					<h2>Gitflow</h2>
-					<h3>Main branches</h3>
+					<h2>Continuous integration; <a href="https://guides.github.com/introduction/flow/">Github flow</a></h2>
+					<p><img src="images/github-flow.png" alt="" /></p>
+				</section>
+
+				<section>
+					<h2>Gitflow; release-based deployment</h2>
+					<p><img src="images/gitflow-model.png" height="580" alt="" /></p>
+				</section>
+
+				<section>
+					<h2>Release-based deployment alternatives</h2>
+					<p><img src="images/releases-1.png" height="580" alt="" /></p>
+				</section>
+
+				<section>
+					<h2>Release-based deployment alternatives</h2>
+					<p><img src="images/releases-3.png" height="580" alt="" /></p>
+				</section>
+
+				<section>
+					<h2>Release-based deployment alternatives</h2>
+					<p><img src="images/releases-2.png" height="580" alt="" /></p>
+				</section>
+
+				<section>
+					<h2>git.git workflow</h2>
 					<ul>
-						<li>master — production ready state</li>
-						<li>develop — latest delivered development changes for the next release</li>
+						<li>Feature graduation
+							<ul>
+								<li>maint — tracks the commits that should go into the next “maintenance release”, i.e., update of the last released stable version;</li>
+								<li>master — tracks the commits that should go into the next release;</li>
+								<li>next — intended as a testing branch for topics being tested for stability for master.</li>
+								<li>pu (proposed updates) — an integration branch for things that are not quite ready for inclusion yet.</li>
+							</ul>
+						</li>
+						<li>Topic branches</li>
+						<li><a href="https://www.kernel.org/pub/software/scm/git/docs/gitworkflows.html">https://www.kernel.org/pub/software/scm/git/docs/gitworkflows.html</a></li>
 					</ul>
 				</section>
 
 				<section>
-					<h2>Gitflow</h2>
-					<h3>Supporting branches</h3>
-					<ul>
-						<li>Feature branches</li>
-						<li>Release branches</li>
-						<li>Hotfix branches</li>
-					</ul>
+					<h2>Questions and discussions</h2>
+					<p><a href="https://xkcd.com/1597/"><img src="images/git_2x.png" height="580" alt="" /></a></p>
 				</section>
-
-				<section>
-					<h2>Gitflow — feature branches (a.k.a. topic branches)</h2>
-					<ul>
-						<li>Used to develop a feature</li>
-						<li>Typically exists in developer repos only, not in origin.</li>
-						<li>May branch off from <em>develop</em></li>
-						<li>Must merge back into <em>develop</em></li>
-						<li>Naming convention: <em>feature/*</em></li>
-					</ul>
-				</section>
-
-				<section>
-					<h2>Gitflow — creating feature branches</h2>
-					<pre><code>$ git checkout -b feature/myfeature develop
-Switched to a new branch "feature/myfeature"</code></pre>
-				</section>
-
-				<section>
-					<h2>Gitflow — finishing feature branches</h2>
-					<pre><code>$ git checkout develop
-Switched to branch 'develop'
-$ git merge --no-ff feature/myfeature
-Updating ea1b82a..05e9557
-(Summary of changes)
-$ git branch -d feature/myfeature
-Deleted branch myfeature (was 05e9557).</code></pre>
-				</section>
-
-				<section>
-					<h2>Gitflow — creating feature branches</h2>
-					<p><img src="images/fb.png" alt="" /></p>
-				</section>
-
-				<section>
-					<h2>Gitflow — release branches</h2>
-					<ul>
-						<li>Supports preparation for new release</li>
-						<li>Good for final touches, minor bugfixes, prepering the metadata for the release</li>
-						<li>Allows the develop branch to be freed to accept changes for the next release</li>
-						<li>May branch off from <em>develop</em></li>
-						<li>Must merge back into <em>develop</em> and <em>master</em></li>
-						<li>Naming convention: <em>release/*</em></li>
-					</ul>
-				</section>
-
-				<section>
-					<h2>Gitflow — creating release branches</h2>
-					<pre><code>$ git checkout -b release/1.2 develop
-Switched to a new branch "release/1.2"
-$ ./bump-version.sh 1.2
-Files modified successfully, version bumped to 1.2.
-$ git commit -a -m "Bumped version number to 1.2"
-[release-1.2 74d9424] Bumped version number to 1.2
-1 files changed, 1 insertions(+), 1 deletions(-)</code></pre>
-				</section>
-
-				<section>
-					<h2>Gitflow — finishing release branches</h2>
-					<pre><code>$ git checkout master
-Switched to branch 'master'
-$ git merge --no-ff release/1.2
-Merge made by recursive.
-(Summary of changes)
-$ git tag -a 1.2
-$ git checkout develop
-Switched to branch 'develop'
-$ git merge --no-ff release/1.2
-Merge made by recursive.
-(Summary of changes)
-$ git branch -d release/1.2
-Deleted branch release/1.2 (was ff452fe).</code></pre>
-				</section>
-
-								<section>
-				<h2>Gitflow — hotfix branches</h2>
-					<ul>
-						<li>Used to fix an undesired state in the master branch, usually a bug</li>
-						<li>May branch off from <em>master</em></li>
-						<li>Must merge back into <em>develop</em> and <em>master</em></li>
-						<li>Naming convention: <em>hotfix/*</em></li>
-					</ul>
-				</section>
-
-				<section>
-					<h2>Gitflow — creating hotfix branches</h2>
-					<pre><code>$ git checkout -b hotfix-1.2.1 master
-Switched to a new branch "hotfix/1.2.1"
-$ ./bump-version.sh 1.2.1
-Files modified successfully, version bumped to 1.2.1.
-$ git commit -a -m "Bumped version number to 1.2.1"
-[hotfix-1.2.1 41e61bb] Bumped version number to 1.2.1
-1 files changed, 1 insertions(+), 1 deletions(-</code></pre>
-				</section>
-
-				<section>
-					<h2>Gitflow — finishing hotfix branches</h2>
-					<pre><code>$ git checkout master
-Switched to branch 'master'
-$ git merge --no-ff hotfix/1.2.1
-Merge made by recursive.
-(Summary of changes)
-$ git tag -a 1.2.1
-$ git checkout develop
-Switched to branch 'develop'
-$ git merge --no-ff hotfix/1.2.1
-Merge made by recursive.
-(Summary of changes)
-$ git branch -d hotfix/1.2.1
-Deleted branch hotfix/1.2.1 (was abbe5d6).</code></pre>
-				</section>
-
-				<section>
-					<h2>Gitflow — creating hotfix branches</h2>
-					<p><img src="images/hotfix-branches1.png" alt="" /></p>
-				</section>
-
-				<section>
-					<p><img src="images/Screen-shot-2009-12-24-at-11.32.03.png" alt="" /></p>
-				</section>
-			</div>
 		</div>
 
 		<script src="reveal-js/lib/js/head.min.js"></script>
