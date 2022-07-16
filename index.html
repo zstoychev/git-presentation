@@ -27,6 +27,7 @@
 			<div class="slides">
 				<section>
 					<h1>Git</h1>
+					<p><a href="https://xkcd.com/1597/"><img src="images/git_2x.png" height="480" alt="" /></a></p>
 				</section>
 
 				<section>
@@ -81,13 +82,11 @@
 				<section>
 					<section>
 						<h2>Distributed Workflows</h2>
-						<h3>Repositories organization</h3>
-<!--						<ul>-->
-<!--							<li>Centralized workflow</li>-->
-<!--							<li>Integration-Manager workflow</li>-->
-<!--							<li>“Decentralized but centralized” workflow (the one Gitflow uses)</li>-->
-<!--							<li>Linux workflow (a.k.a. Dictator and Lieutenants Workflow)</li>-->
-<!--						</ul>-->
+					</section>
+
+					<section>
+						<h2>Linux workflow</h2>
+						<p><img src="images/18333fig0503-tn.png" alt="" />
 					</section>
 
 					<section>
@@ -104,11 +103,6 @@
 						<h2>Integration-Manager workflow</h2>
 						<p><img src="images/18333fig0502-tn.png" alt="" />
 					</section>
-
-					<section>
-						<h2>Linux workflow</h2>
-						<p><img src="images/18333fig0503-tn.png" alt="" />
-					</section>
 				</section>
 
 				<section>
@@ -116,23 +110,20 @@
 
 					<ul>
 						<li class="fragment">The philosophy of git</li>
-						<li class="fragment">Git internals</li>
-						<li class="fragment">Showing/Analysing repository content</li>
-						<li class="fragment">Managing all the parts of the repository</li>
-						<li class="fragment">Creating and manipulating commits & content
+						<li class="fragment">Git internals and how they come together</li>
+						<li class="fragment">Git "externals"
 							<ul>
-								<li>commit</li>
-								<li>cherry-pick</li>
-								<li>revert</li>
-								<li>rebase</li>
-								<li>rebase magic and cleaning up history</li>
+								<li class="fragment">Showing/Analysing repository content</li>
+								<li class="fragment">Managing all the parts of the repository</li>
+								<li class="fragment">Creating and manipulating commits & content</li>
+								<li class="fragment">Merging and conflicts resolution</li>
 							</ul>
 						</li>
-						<li class="fragment">Merging and conflicts resolution</li>
 						<li class="fragment">Remote repositories</li>
+						<li class="fragment">Building clean history</li>
 						<li class="fragment">Some fun tools – reflog, bisect, stash, etc</li>
 						<li class="fragment">Not to be afraid to do something (as there is always a way back)</li>
-						<li class="fragment">Some good practices</li>
+						<li class="fragment">Good practices</li>
 						<li class="fragment">Workflows – how to work together as a team</li>
 					</ul>
 				</section>
@@ -155,7 +146,7 @@
 					<h2>Immutable Data Structures</h2>
 
 					<p class="fragment">They change the way we program</p>
-					<p class="fragment">Especially useful for multi-threaded/distributed systems</p>
+					<p class="fragment">Especially useful for distributed systems</p>
 				</section>
 
 				<section>
@@ -381,117 +372,99 @@ Release v0.1</code></pre>
 
 				<section>
 					<h2><code>git blame</code></h2>
-					<p>prod.c</p>
 
-					<pre><code class="cpp">#include &lt;math.h&gt;
+					<p>FromDigits.scala</p>
+					<pre><code class="scala">package util
 
-double prod(const double* in, int n) {
-    int i;
-    double acc = 1;
+import scala.annotation.tailrec
 
-    for(i = 0; i &lt; n; ++i) {
-        acc *= in[i];
-    }
+def fromDigits(digits: List[Int], radix: Int = 10): Int = {
+  @tailrec
+  def fromDigits(digits: List[Int], acc: Int): Int = {
+    if (digits.isEmpty) acc
+    else fromDigits(digits.tail, acc * radix + digits.head)
+  }
 
-    return acc;
+  fromDigits(digits, 0)
 }</code></pre>
-					<p>sum.c</p>
-					<pre><code class="cpp">#include &lt;math.h&gt;
 
-double sum(const double* in, int n) {
-    int i;
-    double acc = 0;
+					<p>ParseInteger.scala</p>
+					<pre><code class="scala">package util
 
-    for(i = 0; i &lt; n; ++i) {
-        acc += in[i];
-    }
-
-    return acc;
+def parseInteger(integer: String, radix: Int = 10): Int = {
+  if (integer.nonEmpty && integer.head == '-') -parseInteger(integer.tail, radix)
+  else fromDigits(integer.map(_.asDigit).toList, radix)
 }</code></pre>
 				</section>
 
 				<section>
 					<h2><code>git blame</code></h2>
-					<p>common.c (in newer commit)</p>
-					<pre><code class="cpp">#include &lt;math.h&gt;
+					<p>IntegerUtils.scala (in newer commit)</p>
+					<pre><code class="scala">package util
 
-double prod(const double* in, int n) {
-    int i;
-    double acc = 1;
+import scala.annotation.tailrec
 
-    for(i = 0; i &lt; n; ++i) {
-        acc *= in[i];
-    }
+def fromDigits(digits: List[Int], radix: Int = 10): Int = {
+  @tailrec
+  def fromDigits(digits: List[Int], acc: Int): Int = {
+    if (digits.isEmpty) acc
+    else fromDigits(digits.tail, acc * radix + digits.head)
+  }
 
-    return acc;
+  fromDigits(digits, 0)
 }
 
-double sum(const double* in, int n) {
-    int i;
-    double acc = 0;
-
-    for(i = 0; i &lt; n; ++i) {
-        acc += in[i];
-    }
-
-    return acc;
+def parseInteger(integer: String, radix: Int = 10): Int = {
+  if (integer.nonEmpty && integer.head == '-') -parseInteger(integer.tail, radix)
+  else fromDigits(integer.map(_.asDigit).toList, radix)
 }</code></pre>
 				</section>
 
 				<section>
 					<h2><code>git blame</code></h2>
-					<p><code>git blame common.c</code></p>
-					<pre><code class="shell">^479376f prod.c    1) #include &lt;math.h&gt;
-^479376f prod.c    2)
-^479376f prod.c    3) double prod(const double* in, int n) {
-^479376f prod.c    4)     int i;
-^479376f prod.c    5)     double acc = 1;
-^479376f prod.c    6)
-^479376f prod.c    7)     for(i = 0; i &lt; n; ++i) {
-^479376f prod.c    8)         acc *= in[i];
-^479376f prod.c    9)     }
-^479376f prod.c   10)
-^479376f prod.c   11)     return acc;
-^479376f prod.c   12) }
-d3a9479f common.c 13)
-d3a9479f common.c 14) double sum(const double* in, int n) {
-d3a9479f common.c 15)     int i;
-d3a9479f common.c 16)     double acc = 0;
-d3a9479f common.c 17)
-d3a9479f common.c 18)     for(i = 0; i &lt; n; ++i) {
-d3a9479f common.c 19)         acc += in[i];
-d3a9479f common.c 20)     }
-d3a9479f common.c 21)
-d3a9479f common.c 22)     return acc;
-d3a9479f common.c 23) }</code></pre>
+					<p><code>git blame IntegerUtils.scala</code></p>
+					<pre><code class="shell">^32959f4 FromDigits.scala    1) package util
+^32959f4 FromDigits.scala    2)
+^32959f4 FromDigits.scala    3) import scala.annotation.tailrec
+^32959f4 FromDigits.scala    4)
+^32959f4 FromDigits.scala    5) def fromDigits(digits: List[Int], radix: Int = 10): Int = {
+^32959f4 FromDigits.scala    6)   @tailrec
+^32959f4 FromDigits.scala    7)   def fromDigits(digits: List[Int], acc: Int): Int = {
+^32959f4 FromDigits.scala    8)     if (digits.isEmpty) acc
+^32959f4 FromDigits.scala    9)     else fromDigits(digits.tail, acc * radix + digits.head)
+^32959f4 FromDigits.scala   10)   }
+^32959f4 FromDigits.scala   11)
+^32959f4 FromDigits.scala   12)   fromDigits(digits, 0)
+^32959f4 FromDigits.scala   13) }
+31e1fe0b IntegerUtils.scala 14)
+31e1fe0b IntegerUtils.scala 15) def parseInteger(integer: String, radix: Int = 10): Int = {
+31e1fe0b IntegerUtils.scala 16)   if (integer.nonEmpty && integer.head == '-') -parseInteger(integer.tail, radix)
+31e1fe0b IntegerUtils.scala 17)   else fromDigits(integer.map(_.asDigit).toList, radix)
+31e1fe0b IntegerUtils.scala 18) }</code></pre>
 				</section>
 
 				<section>
 					<h2><code>git blame</code></h2>
-					<p><code>git blame -C common.c</code></p>
-					<pre><code class="shell">^479376f prod.c  1) #include &lt;math.h&gt;
-^479376f prod.c  2)
-^479376f prod.c  3) double prod(const double* in, int n) {
-^479376f prod.c  4)     int i;
-^479376f prod.c  5)     double acc = 1;
-^479376f prod.c  6)
-^479376f prod.c  7)     for(i = 0; i &lt; n; ++i) {
-^479376f prod.c  8)         acc *= in[i];
-^479376f prod.c  9)     }
-^479376f prod.c 10)
-^479376f prod.c 11)     return acc;
-^479376f prod.c 12) }
-^479376f sum.c  13)
-^479376f sum.c  14) double sum(const double* in, int n) {
-^479376f sum.c  15)     int i;
-^479376f sum.c  16)     double acc = 0;
-^479376f sum.c  17)
-^479376f sum.c  18)     for(i = 0; i &lt; n; ++i) {
-^479376f sum.c  19)         acc += in[i];
-^479376f sum.c  20)     }
-^479376f sum.c  21)
-^479376f sum.c  22)     return acc;
-^479376f sum.c  23) }</code></pre>
+					<p><code>git blame -C IntegerUtils.scala</code></p>
+					<pre><code class="shell">^32959f4 FromDigits.scala    1) package util
+^32959f4 FromDigits.scala    2)
+^32959f4 FromDigits.scala    3) import scala.annotation.tailrec
+^32959f4 FromDigits.scala    4)
+^32959f4 FromDigits.scala    5) def fromDigits(digits: List[Int], radix: Int = 10): Int = {
+^32959f4 FromDigits.scala    6)   @tailrec
+^32959f4 FromDigits.scala    7)   def fromDigits(digits: List[Int], acc: Int): Int = {
+^32959f4 FromDigits.scala    8)     if (digits.isEmpty) acc
+^32959f4 FromDigits.scala    9)     else fromDigits(digits.tail, acc * radix + digits.head)
+^32959f4 FromDigits.scala   10)   }
+^32959f4 FromDigits.scala   11)
+^32959f4 FromDigits.scala   12)   fromDigits(digits, 0)
+^32959f4 FromDigits.scala   13) }
+^32959f4 ParseInteger.scala 14)
+^32959f4 ParseInteger.scala 15) def parseInteger(integer: String, radix: Int = 10): Int = {
+^32959f4 ParseInteger.scala 16)   if (integer.nonEmpty && integer.head == '-') -parseInteger(integer.tail, radix)
+^32959f4 ParseInteger.scala 17)   else fromDigits(integer.map(_.asDigit).toList, radix)
+^32959f4 ParseInteger.scala 18) }
+</code></pre>
 				</section>
 
 				<section>
@@ -1215,6 +1188,14 @@ git pull linus-repo v2.6.29</blockquote>
 				</section>
 
 				<section>
+					<h2>Git Patches</h2>
+				</section>
+
+				<section>
+					<h2>Git Attributes</h2>
+				</section>
+
+				<section>
 					<h2>git submodule</h2>
 
 					<ul class="fragment">
@@ -1270,11 +1251,6 @@ git pull linus-repo v2.6.29</blockquote>
 						<li>Topic branches</li>
 						<li><a href="https://www.kernel.org/pub/software/scm/git/docs/gitworkflows.html">https://www.kernel.org/pub/software/scm/git/docs/gitworkflows.html</a></li>
 					</ul>
-				</section>
-
-				<section>
-					<h2>Questions and discussions</h2>
-					<p><a href="https://xkcd.com/1597/"><img src="images/git_2x.png" height="580" alt="" /></a></p>
 				</section>
 		</div>
 
